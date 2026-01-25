@@ -15,6 +15,8 @@
             --gold-dim: #c9a227;
             --text: #eaeaea;
             --text-muted: #8892a0;
+            --success: #27ae60;
+            --warning: #f39c12;
         }
 
         * {
@@ -84,6 +86,286 @@
             margin-top: 0.15rem;
         }
 
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            width: 100%;
+            max-width: 340px;
+            margin-bottom: 1rem;
+            background: rgba(22, 33, 62, 0.8);
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.6rem 0.5rem;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: var(--text);
+        }
+
+        .tab-content {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Analytics Dashboard Styles */
+        .analytics-section {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(22, 33, 62, 0.9);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.25rem;
+        }
+
+        .chart-card {
+            background: rgba(22, 33, 62, 0.9);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .chart-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            color: var(--text);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-title span {
+            font-size: 1.1rem;
+        }
+
+        /* Bar Chart */
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bar-label {
+            width: 80px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 6px;
+        }
+
+        .bar-value {
+            font-size: 0.65rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .leader-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+        }
+
+        .leader-row.gold {
+            background: linear-gradient(135deg, rgba(244, 208, 63, 0.15) 0%, rgba(201, 162, 39, 0.1) 100%);
+            border: 1px solid rgba(244, 208, 63, 0.3);
+        }
+
+        .leader-row.silver {
+            background: linear-gradient(135deg, rgba(192, 192, 192, 0.1) 0%, rgba(128, 128, 128, 0.05) 100%);
+            border: 1px solid rgba(192, 192, 192, 0.2);
+        }
+
+        .leader-row.bronze {
+            background: linear-gradient(135deg, rgba(205, 127, 50, 0.1) 0%, rgba(139, 69, 19, 0.05) 100%);
+            border: 1px solid rgba(205, 127, 50, 0.2);
+        }
+
+        .leader-rank {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .leader-row.gold .leader-rank { color: var(--gold); }
+        .leader-row.silver .leader-rank { color: #c0c0c0; }
+        .leader-row.bronze .leader-rank { color: #cd7f32; }
+
+        .leader-name {
+            flex: 1;
+            font-size: 0.85rem;
+        }
+
+        .leader-count {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            color: var(--accent);
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+
+        .activity-emoji {
+            font-size: 1.2rem;
+        }
+
+        .activity-text {
+            flex: 1;
+            color: var(--text-muted);
+        }
+
+        .activity-text strong {
+            color: var(--text);
+        }
+
+        .activity-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Loading */
+        .loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+
+        .no-data-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
         /* Owner Select */
         .owner-section {
             width: 100%;
@@ -125,6 +407,128 @@
         .owner-select option {
             background: var(--secondary);
             color: var(--text);
+        }
+
+        /* Webcam styles */
+        .webcam-container {
+            width: 100%;
+            max-width: 340px;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            background: rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .webcam-container.active {
+            display: block;
+        }
+
+        .webcam-video {
+            width: 100%;
+            display: block;
+            transform: scaleX(-1);
+            border-radius: 12px;
+        }
+
+        .recording-indicator {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0,0,0,0.6);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: white;
+        }
+
+        .recording-dot {
+            width: 10px;
+            height: 10px;
+            background: #e74c3c;
+            border-radius: 50%;
+            animation: pulse-dot 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .webcam-prompt {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(22, 33, 62, 0.95);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .webcam-prompt.active {
+            display: block;
+        }
+
+        .webcam-prompt p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .webcam-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0 0.25rem;
+        }
+
+        .webcam-btn-yes {
+            background: linear-gradient(135deg, var(--accent) 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .webcam-btn-no {
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+        }
+
+        .webcam-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .download-btn {
+            display: none;
+            width: 100%;
+            max-width: 340px;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .download-btn.active {
+            display: block;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
         }
 
         /* Wheel Container */
@@ -331,128 +735,6 @@
             color: var(--accent);
         }
 
-        /* Webcam styles */
-        .webcam-container {
-            width: 100%;
-            max-width: 340px;
-            margin-bottom: 1rem;
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            background: rgba(0,0,0,0.3);
-            display: none;
-        }
-
-        .webcam-container.active {
-            display: block;
-        }
-
-        .webcam-video {
-            width: 100%;
-            display: block;
-            transform: scaleX(-1);
-            border-radius: 12px;
-        }
-
-        .recording-indicator {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(0,0,0,0.6);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            color: white;
-        }
-
-        .recording-dot {
-            width: 10px;
-            height: 10px;
-            background: #e74c3c;
-            border-radius: 50%;
-            animation: pulse-dot 1s ease-in-out infinite;
-        }
-
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-
-        .webcam-prompt {
-            text-align: center;
-            padding: 1rem;
-            background: rgba(22, 33, 62, 0.95);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            display: none;
-        }
-
-        .webcam-prompt.active {
-            display: block;
-        }
-
-        .webcam-prompt p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .webcam-btn {
-            padding: 0.6rem 1.2rem;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 0.1em;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin: 0 0.25rem;
-        }
-
-        .webcam-btn-yes {
-            background: linear-gradient(135deg, var(--accent) 0%, #c0392b 100%);
-            color: white;
-        }
-
-        .webcam-btn-no {
-            background: rgba(255,255,255,0.1);
-            color: var(--text);
-        }
-
-        .webcam-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .download-btn {
-            display: none;
-            width: 100%;
-            max-width: 340px;
-            padding: 0.8rem 1.5rem;
-            background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem;
-            letter-spacing: 0.1em;
-            cursor: pointer;
-            margin-top: 1rem;
-            transition: all 0.2s ease;
-        }
-
-        .download-btn.active {
-            display: block;
-        }
-
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
-        }
-
         /* Confetti canvas */
         #confetti {
             position: fixed;
@@ -515,75 +797,94 @@
             <div class="subtitle">PUNISHMENT SPINNER</div>
         </header>
 
-        <div class="owner-section">
-            <label class="owner-label">WHO'S FACING THE MUSIC?</label>
-            <select class="owner-select" id="ownerSelect">
-                <option value="">-- Select Your Name --</option>
-                <option value="Aaron DeGiulio">Aaron DeGiulio</option>
-                <option value="Brian Scott">Brian Scott</option>
-                <option value="Carter Bayer">Carter Bayer</option>
-                <option value="Connor Scott">Connor Scott</option>
-                <option value="Eric Croak">Eric Croak</option>
-                <option value="Jay O'Bryant">Jay O'Bryant</option>
-                <option value="Jon Bartsch">Jon Bartsch</option>
-                <option value="Kyle Boyers">Kyle Boyers</option>
-                <option value="Kyle Mautíer">Kyle Mautíer</option>
-                <option value="Lucas O'Neil">Lucas O'Neil</option>
-                <option value="Ryan Johnston">Ryan Johnston</option>
-                <option value="Tyler Clark">Tyler Clark</option>
-            </select>
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="showTab('spinner')">🎰 SPINNER</button>
+            <button class="tab-btn" onclick="showTab('analytics')">📊 ANALYTICS</button>
         </div>
 
-        <div class="webcam-prompt" id="webcamPrompt">
-            <p>📹 Want to record your reaction?</p>
-            <button class="webcam-btn webcam-btn-yes" onclick="enableWebcam()">YEAH, LET'S GO!</button>
-            <button class="webcam-btn webcam-btn-no" onclick="skipWebcam()">NAH, JUST SPIN</button>
-        </div>
-
-        <div class="webcam-container" id="webcamContainer">
-            <video class="webcam-video" id="webcamVideo" autoplay muted playsinline></video>
-            <div class="recording-indicator" id="recordingIndicator" style="display: none;">
-                <div class="recording-dot"></div>
-                <span>REC</span>
+        <!-- Spinner Tab -->
+        <div class="tab-content active" id="spinnerTab">
+            <div class="owner-section">
+                <label class="owner-label">WHO'S FACING THE MUSIC?</label>
+                <select class="owner-select" id="ownerSelect">
+                    <option value="">-- Select Your Name --</option>
+                    <option value="Aaron DeGiulio">Aaron DeGiulio</option>
+                    <option value="Brian Scott">Brian Scott</option>
+                    <option value="Carter Bayer">Carter Bayer</option>
+                    <option value="Connor Scott">Connor Scott</option>
+                    <option value="Eric Croak">Eric Croak</option>
+                    <option value="Jay O'Bryant">Jay O'Bryant</option>
+                    <option value="Jon Bartsch">Jon Bartsch</option>
+                    <option value="Kyle Boyers">Kyle Boyers</option>
+                    <option value="Kyle Mautíer">Kyle Mautíer</option>
+                    <option value="Lucas O'Neil">Lucas O'Neil</option>
+                    <option value="Ryan Johnston">Ryan Johnston</option>
+                    <option value="Tyler Clark">Tyler Clark</option>
+                </select>
             </div>
-        </div>
 
-        <div class="wheel-wrapper">
-            <div class="wheel-container">
-                <div class="wheel-outer-ring"></div>
-                <div class="pointer"></div>
-                
-                <svg class="wheel-svg" id="wheel" viewBox="0 0 400 400">
-                    <!-- Segments generated by JS -->
-                </svg>
-                
-                <div class="wheel-center disabled" id="spinBtn">
-                    <span class="wheel-center-text">SELECT<br>NAME</span>
+            <div class="webcam-prompt" id="webcamPrompt">
+                <p>📹 Want to record your reaction?</p>
+                <button class="webcam-btn webcam-btn-yes" onclick="enableWebcam()">YEAH, LET'S GO!</button>
+                <button class="webcam-btn webcam-btn-no" onclick="skipWebcam()">NAH, JUST SPIN</button>
+            </div>
+
+            <div class="webcam-container" id="webcamContainer">
+                <video class="webcam-video" id="webcamVideo" autoplay muted playsinline></video>
+                <div class="recording-indicator" id="recordingIndicator" style="display: none;">
+                    <div class="recording-dot"></div>
+                    <span>REC</span>
                 </div>
             </div>
+
+            <div class="wheel-wrapper">
+                <div class="wheel-container">
+                    <div class="wheel-outer-ring"></div>
+                    <div class="pointer"></div>
+                    
+                    <svg class="wheel-svg" id="wheel" viewBox="0 0 400 400">
+                        <!-- Segments generated by JS -->
+                    </svg>
+                    
+                    <div class="wheel-center disabled" id="spinBtn">
+                        <span class="wheel-center-text">SELECT<br>NAME</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-container" id="resultContainer">
+                <div class="result-emoji" id="resultEmoji">🎰</div>
+                <div class="result-label">YOUR PUNISHMENT</div>
+                <div class="result-title" id="resultTitle">Spin to find out...</div>
+                <div class="result-description" id="resultDescription">Select your name and click SPIN!</div>
+                <div class="result-logged" id="resultLogged"></div>
+            </div>
+
+            <button class="download-btn" id="downloadBtn" onclick="downloadVideo()">📥 DOWNLOAD REACTION VIDEO</button>
+
+            <div class="legend">
+                <div class="legend-title">PUNISHMENTS</div>
+                <div class="legend-grid" id="legendGrid"></div>
+            </div>
         </div>
 
-        <div class="result-container" id="resultContainer">
-            <div class="result-emoji" id="resultEmoji">🎰</div>
-            <div class="result-label">YOUR PUNISHMENT</div>
-            <div class="result-title" id="resultTitle">Spin to find out...</div>
-            <div class="result-description" id="resultDescription">Select your name and click SPIN!</div>
-            <div class="result-logged" id="resultLogged"></div>
-        </div>
-
-        <button class="download-btn" id="downloadBtn" onclick="downloadVideo()">📥 DOWNLOAD REACTION VIDEO</button>
-
-        <div class="legend">
-            <div class="legend-title">PUNISHMENTS</div>
-            <div class="legend-grid" id="legendGrid"></div>
+        <!-- Analytics Tab -->
+        <div class="tab-content" id="analyticsTab">
+            <div class="analytics-section" id="analyticsContent">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <span>Loading analytics...</span>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         // ============================================
-        // CONFIGURATION - UPDATE THIS URL
+        // CONFIGURATION
         // ============================================
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_tGBeRksoRcBYnD2UQBcD0ya1yB2Mv3_txmOgTyuMzPu7EikILRHfjAQhBmJMGK0/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPrZJS-BiimfE7s3wFWQJ9EhG2vsf0oJqtdo3DIVpJ39C6dEkX60tKBsre35FyBVY/exec';
         // ============================================
 
         const punishments = [
@@ -615,127 +916,187 @@
         const segmentCount = punishments.length;
         const segmentAngle = 360 / segmentCount;
 
-        // Build the wheel with SVG
-        function buildWheel() {
-            const cx = 200, cy = 200, r = 185;
+        // Tab switching
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             
-            punishments.forEach((p, i) => {
-                const startAngle = (i * segmentAngle - 90) * Math.PI / 180;
-                const endAngle = ((i + 1) * segmentAngle - 90) * Math.PI / 180;
-                
-                const x1 = cx + r * Math.cos(startAngle);
-                const y1 = cy + r * Math.sin(startAngle);
-                const x2 = cx + r * Math.cos(endAngle);
-                const y2 = cy + r * Math.sin(endAngle);
-                
-                // Create gradient for 3D effect
-                const gradId = `grad${i}`;
-                const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-                const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-                gradient.setAttribute('id', gradId);
-                gradient.setAttribute('x1', '0%');
-                gradient.setAttribute('y1', '0%');
-                gradient.setAttribute('x2', '100%');
-                gradient.setAttribute('y2', '100%');
-                
-                const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-                stop1.setAttribute('offset', '0%');
-                stop1.setAttribute('style', `stop-color:${lightenColor(p.color, 20)}`);
-                
-                const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-                stop2.setAttribute('offset', '100%');
-                stop2.setAttribute('style', `stop-color:${p.color}`);
-                
-                gradient.appendChild(stop1);
-                gradient.appendChild(stop2);
-                defs.appendChild(gradient);
-                wheelSvg.appendChild(defs);
-                
-                // Create path
-                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                const largeArcFlag = segmentAngle > 180 ? 1 : 0;
-                const d = `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
-                path.setAttribute('d', d);
-                path.setAttribute('fill', `url(#${gradId})`);
-                path.setAttribute('class', 'wheel-segment-path');
-                wheelSvg.appendChild(path);
-                
-                // Calculate position for emoji and text
-                const midAngle = ((i + 0.5) * segmentAngle - 90) * Math.PI / 180;
-                const emojiR = r * 0.72;
-                const textR = r * 0.48;
-                
-                // Emoji
-                const emojiEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                emojiEl.setAttribute('x', cx + emojiR * Math.cos(midAngle));
-                emojiEl.setAttribute('y', cy + emojiR * Math.sin(midAngle));
-                emojiEl.setAttribute('class', 'segment-emoji');
-                emojiEl.setAttribute('text-anchor', 'middle');
-                emojiEl.setAttribute('dominant-baseline', 'middle');
-                emojiEl.textContent = p.emoji;
-                wheelSvg.appendChild(emojiEl);
-                
-                // Text label - curved along the segment
-                const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                const textX = cx + textR * Math.cos(midAngle);
-                const textY = cy + textR * Math.sin(midAngle);
-                textEl.setAttribute('x', textX);
-                textEl.setAttribute('y', textY);
-                textEl.setAttribute('class', 'segment-text');
-                textEl.setAttribute('dominant-baseline', 'middle');
-                
-                // Rotate text to be readable
-                let rotateAngle = (i + 0.5) * segmentAngle;
-                // Flip text on bottom half so it's not upside down
-                if (rotateAngle > 90 && rotateAngle < 270) {
-                    rotateAngle += 180;
-                }
-                textEl.setAttribute('transform', `rotate(${rotateAngle}, ${textX}, ${textY})`);
-                textEl.textContent = p.title.toUpperCase();
-                wheelSvg.appendChild(textEl);
-            });
-        }
-
-        // Lighten color helper
-        function lightenColor(color, percent) {
-            const num = parseInt(color.replace('#', ''), 16);
-            const amt = Math.round(2.55 * percent);
-            const R = (num >> 16) + amt;
-            const G = (num >> 8 & 0x00FF) + amt;
-            const B = (num & 0x0000FF) + amt;
-            return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
-                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
-                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
-        }
-
-        // Build legend
-        function buildLegend() {
-            punishments.forEach(p => {
-                const item = document.createElement('div');
-                item.className = 'legend-item';
-                item.innerHTML = `<span class="legend-dot" style="background:${p.color}"></span>${p.emoji} ${p.title}`;
-                legendGrid.appendChild(item);
-            });
-        }
-
-        // Setup confetti canvas
-        function resizeConfetti() {
-            confettiCanvas.width = window.innerWidth;
-            confettiCanvas.height = window.innerHeight;
-        }
-        resizeConfetti();
-        window.addEventListener('resize', resizeConfetti);
-
-        // Owner select handler
-        ownerSelect.addEventListener('change', function() {
-            if (this.value) {
-                spinBtn.classList.remove('disabled');
-                spinBtn.querySelector('.wheel-center-text').innerHTML = 'SPIN!';
-            } else {
-                spinBtn.classList.add('disabled');
-                spinBtn.querySelector('.wheel-center-text').innerHTML = 'SELECT<br>NAME';
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+            
+            if (tabName === 'analytics') {
+                loadAnalytics();
             }
-        });
+        }
+
+        // Analytics functions
+        async function loadAnalytics() {
+            const container = document.getElementById('analyticsContent');
+            container.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><span>Loading analytics...</span></div>`;
+            
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=getSpinLog');
+                const data = await response.json();
+                
+                if (data.status === 'success' && data.data && data.data.length > 0) {
+                    renderAnalytics(data.data);
+                } else {
+                    container.innerHTML = `
+                        <div class="no-data">
+                            <div class="no-data-emoji">🎰</div>
+                            <p>No spins recorded yet!</p>
+                            <p style="font-size: 0.85rem;">Be the first to spin the wheel.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+                container.innerHTML = `
+                    <div class="no-data">
+                        <div class="no-data-emoji">⚠️</div>
+                        <p>Could not load analytics</p>
+                        <p style="font-size: 0.85rem;">Please try again later.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderAnalytics(data) {
+            const container = document.getElementById('analyticsContent');
+            
+            // Calculate stats
+            const totalSpins = data.length;
+            const uniqueOwners = [...new Set(data.map(d => d.owner))].length;
+            
+            // Count by punishment
+            const punishmentCounts = {};
+            punishments.forEach(p => punishmentCounts[p.title] = 0);
+            data.forEach(d => {
+                if (punishmentCounts.hasOwnProperty(d.punishment)) {
+                    punishmentCounts[d.punishment]++;
+                }
+            });
+            
+            // Count by owner
+            const ownerCounts = {};
+            data.forEach(d => {
+                ownerCounts[d.owner] = (ownerCounts[d.owner] || 0) + 1;
+            });
+            
+            // Sort owners by count
+            const sortedOwners = Object.entries(ownerCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            // Most common punishment
+            const maxPunishment = Object.entries(punishmentCounts)
+                .sort((a, b) => b[1] - a[1])[0];
+            
+            // Recent spins (last 5)
+            const recentSpins = data.slice(-5).reverse();
+            
+            // Build HTML
+            container.innerHTML = `
+                <!-- Summary Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">${totalSpins}</div>
+                        <div class="stat-label">Total Spins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${uniqueOwners}</div>
+                        <div class="stat-label">Unique Victims</div>
+                    </div>
+                </div>
+                
+                <!-- Punishment Distribution -->
+                <div class="chart-card">
+                    <div class="chart-title"><span>📊</span> Punishment Distribution</div>
+                    <div class="bar-chart" id="punishmentChart"></div>
+                </div>
+                
+                <!-- Shame Leaderboard -->
+                <div class="chart-card">
+                    <div class="chart-title"><span>🏆</span> Hall of Shame</div>
+                    <div class="leaderboard" id="leaderboard"></div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="chart-card">
+                    <div class="chart-title"><span>🕐</span> Recent Spins</div>
+                    <div class="activity-list" id="activityList"></div>
+                </div>
+            `;
+            
+            // Render bar chart
+            const chartContainer = document.getElementById('punishmentChart');
+            const maxCount = Math.max(...Object.values(punishmentCounts), 1);
+            
+            punishments.forEach(p => {
+                const count = punishmentCounts[p.title] || 0;
+                const pct = (count / maxCount) * 100;
+                
+                chartContainer.innerHTML += `
+                    <div class="bar-row">
+                        <div class="bar-label">${p.emoji} ${p.title}</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: ${pct}%; background: ${p.color};">
+                                ${count > 0 ? `<span class="bar-value">${count}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Render leaderboard
+            const leaderboard = document.getElementById('leaderboard');
+            sortedOwners.forEach((entry, i) => {
+                const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+                leaderboard.innerHTML += `
+                    <div class="leader-row ${rankClass}">
+                        <div class="leader-rank">${i + 1}</div>
+                        <div class="leader-name">${entry[0]}</div>
+                        <div class="leader-count">${entry[1]} spin${entry[1] > 1 ? 's' : ''}</div>
+                    </div>
+                `;
+            });
+            
+            if (sortedOwners.length === 0) {
+                leaderboard.innerHTML = '<div class="no-data" style="padding: 1rem;">No data yet</div>';
+            }
+            
+            // Render recent activity
+            const activityList = document.getElementById('activityList');
+            recentSpins.forEach(spin => {
+                const punishment = punishments.find(p => p.title === spin.punishment);
+                const emoji = punishment ? punishment.emoji : '🎰';
+                const timeAgo = formatTimeAgo(spin.timestamp);
+                
+                activityList.innerHTML += `
+                    <div class="activity-item">
+                        <span class="activity-emoji">${emoji}</span>
+                        <span class="activity-text"><strong>${spin.owner}</strong> got ${spin.punishment}</span>
+                        <span class="activity-time">${timeAgo}</span>
+                    </div>
+                `;
+            });
+            
+            if (recentSpins.length === 0) {
+                activityList.innerHTML = '<div class="no-data" style="padding: 1rem;">No recent spins</div>';
+            }
+        }
+
+        function formatTimeAgo(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000);
+            
+            if (diff < 60) return 'just now';
+            if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+            if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+            if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
+            return date.toLocaleDateString();
+        }
 
         // Webcam recording variables
         let mediaStream = null;
@@ -899,7 +1260,7 @@
         function showCompletionScreen() {
             // Hide everything and show completion
             document.querySelector('.container').innerHTML = `
-                <div style="text-align: center; padding: 3rem 1.5rem; animation: fadeInUp 0.8s ease-out;">
+                <div style="text-align: center; padding: 3rem 1.5rem; animation: fadeIn 0.8s ease-out;">
                     <div style="font-size: 5rem; margin-bottom: 1rem;">🎬</div>
                     <div style="font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 1rem; letter-spacing: 0.05em;">
                         ALL DONE!
@@ -982,12 +1343,6 @@
                 punishment_title: punishment.title
             };
             
-            if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-                console.log('Demo mode - would log:', data);
-                resultLogged.textContent = '✓ Logged (demo mode)';
-                return;
-            }
-            
             try {
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
@@ -1002,6 +1357,117 @@
                 resultLogged.classList.add('error');
             }
         }
+
+        // Build the wheel with SVG
+        function buildWheel() {
+            const cx = 200, cy = 200, r = 185;
+            
+            punishments.forEach((p, i) => {
+                const startAngle = (i * segmentAngle - 90) * Math.PI / 180;
+                const endAngle = ((i + 1) * segmentAngle - 90) * Math.PI / 180;
+                
+                const x1 = cx + r * Math.cos(startAngle);
+                const y1 = cy + r * Math.sin(startAngle);
+                const x2 = cx + r * Math.cos(endAngle);
+                const y2 = cy + r * Math.sin(endAngle);
+                
+                // Create gradient for 3D effect
+                const gradId = `grad${i}`;
+                const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+                gradient.setAttribute('id', gradId);
+                gradient.setAttribute('x1', '0%');
+                gradient.setAttribute('y1', '0%');
+                gradient.setAttribute('x2', '100%');
+                gradient.setAttribute('y2', '100%');
+                
+                const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                stop1.setAttribute('offset', '0%');
+                stop1.setAttribute('style', `stop-color:${lightenColor(p.color, 20)}`);
+                
+                const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                stop2.setAttribute('offset', '100%');
+                stop2.setAttribute('style', `stop-color:${p.color}`);
+                
+                gradient.appendChild(stop1);
+                gradient.appendChild(stop2);
+                defs.appendChild(gradient);
+                wheelSvg.appendChild(defs);
+                
+                // Create path
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const largeArcFlag = segmentAngle > 180 ? 1 : 0;
+                const d = `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
+                path.setAttribute('d', d);
+                path.setAttribute('fill', `url(#${gradId})`);
+                path.setAttribute('class', 'wheel-segment-path');
+                wheelSvg.appendChild(path);
+                
+                // Calculate position for emoji and text
+                const midAngle = ((i + 0.5) * segmentAngle - 90) * Math.PI / 180;
+                const emojiR = r * 0.72;
+                const textR = r * 0.48;
+                
+                // Emoji
+                const emojiEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                emojiEl.setAttribute('x', cx + emojiR * Math.cos(midAngle));
+                emojiEl.setAttribute('y', cy + emojiR * Math.sin(midAngle));
+                emojiEl.setAttribute('class', 'segment-emoji');
+                emojiEl.setAttribute('text-anchor', 'middle');
+                emojiEl.setAttribute('dominant-baseline', 'middle');
+                emojiEl.textContent = p.emoji;
+                wheelSvg.appendChild(emojiEl);
+                
+                // Text label - curved along the segment
+                const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                const textX = cx + textR * Math.cos(midAngle);
+                const textY = cy + textR * Math.sin(midAngle);
+                textEl.setAttribute('x', textX);
+                textEl.setAttribute('y', textY);
+                textEl.setAttribute('class', 'segment-text');
+                textEl.setAttribute('dominant-baseline', 'middle');
+                
+                // Rotate text to be readable
+                let rotateAngle = (i + 0.5) * segmentAngle;
+                // Flip text on bottom half so it's not upside down
+                if (rotateAngle > 90 && rotateAngle < 270) {
+                    rotateAngle += 180;
+                }
+                textEl.setAttribute('transform', `rotate(${rotateAngle}, ${textX}, ${textY})`);
+                textEl.textContent = p.title.toUpperCase();
+                wheelSvg.appendChild(textEl);
+            });
+        }
+
+        // Lighten color helper
+        function lightenColor(color, percent) {
+            const num = parseInt(color.replace('#', ''), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) + amt;
+            const G = (num >> 8 & 0x00FF) + amt;
+            const B = (num & 0x0000FF) + amt;
+            return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        }
+
+        // Build legend
+        function buildLegend() {
+            punishments.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'legend-item';
+                item.innerHTML = `<span class="legend-dot" style="background:${p.color}"></span>${p.emoji} ${p.title}`;
+                legendGrid.appendChild(item);
+            });
+        }
+
+        // Setup confetti canvas
+        function resizeConfetti() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        }
+        resizeConfetti();
+        window.addEventListener('resize', resizeConfetti);
 
         // Confetti animation
         let confettiPieces = [];
