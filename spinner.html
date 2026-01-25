@@ -608,20 +608,23 @@
             spinBtn.querySelector('.wheel-center-text').innerHTML = '...';
             resultContainer.classList.remove('show', 'winner');
             
-            // Truly random selection
-            const randomSegment = Math.floor(Math.random() * segmentCount);
-            
-            // Calculate spin: 5-8 full rotations + land on random segment
+            // Calculate spin: 5-8 full rotations + random landing position
             const extraSpins = (5 + Math.random() * 3) * 360;
-            const segmentOffset = randomSegment * segmentAngle + segmentAngle / 2;
-            const finalAngle = extraSpins + (360 - segmentOffset) + 90;
+            const randomAngle = Math.random() * 360;
+            const finalAngle = extraSpins + randomAngle;
             
             currentRotation += finalAngle;
             wheelSvg.style.transform = `rotate(${currentRotation}deg)`;
             
-            // Show result after spin
+            // Show result after spin - calculate which segment is at pointer
             setTimeout(() => {
-                const winner = punishments[randomSegment];
+                // Normalize rotation to 0-360
+                const normalizedRotation = currentRotation % 360;
+                // Pointer is at top (270 degrees in standard position, but we built wheel starting at -90)
+                // Calculate which segment the pointer lands on
+                const pointerPosition = (360 - normalizedRotation + 360) % 360;
+                const winningIndex = Math.floor(pointerPosition / segmentAngle) % segmentCount;
+                const winner = punishments[winningIndex];
                 
                 resultEmoji.textContent = winner.emoji;
                 resultTitle.textContent = winner.title;
