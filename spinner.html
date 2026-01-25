@@ -331,6 +331,128 @@
             color: var(--accent);
         }
 
+        /* Webcam styles */
+        .webcam-container {
+            width: 100%;
+            max-width: 340px;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            background: rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .webcam-container.active {
+            display: block;
+        }
+
+        .webcam-video {
+            width: 100%;
+            display: block;
+            transform: scaleX(-1);
+            border-radius: 12px;
+        }
+
+        .recording-indicator {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0,0,0,0.6);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: white;
+        }
+
+        .recording-dot {
+            width: 10px;
+            height: 10px;
+            background: #e74c3c;
+            border-radius: 50%;
+            animation: pulse-dot 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .webcam-prompt {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(22, 33, 62, 0.95);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .webcam-prompt.active {
+            display: block;
+        }
+
+        .webcam-prompt p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .webcam-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0 0.25rem;
+        }
+
+        .webcam-btn-yes {
+            background: linear-gradient(135deg, var(--accent) 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .webcam-btn-no {
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+        }
+
+        .webcam-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .download-btn {
+            display: none;
+            width: 100%;
+            max-width: 340px;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .download-btn.active {
+            display: block;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+        }
+
         /* Confetti canvas */
         #confetti {
             position: fixed;
@@ -412,6 +534,20 @@
             </select>
         </div>
 
+        <div class="webcam-prompt" id="webcamPrompt">
+            <p>📹 Want to record your reaction?</p>
+            <button class="webcam-btn webcam-btn-yes" onclick="enableWebcam()">YEAH, LET'S GO!</button>
+            <button class="webcam-btn webcam-btn-no" onclick="skipWebcam()">NAH, JUST SPIN</button>
+        </div>
+
+        <div class="webcam-container" id="webcamContainer">
+            <video class="webcam-video" id="webcamVideo" autoplay muted playsinline></video>
+            <div class="recording-indicator" id="recordingIndicator" style="display: none;">
+                <div class="recording-dot"></div>
+                <span>REC</span>
+            </div>
+        </div>
+
         <div class="wheel-wrapper">
             <div class="wheel-container">
                 <div class="wheel-outer-ring"></div>
@@ -434,6 +570,8 @@
             <div class="result-description" id="resultDescription">Select your name and click SPIN!</div>
             <div class="result-logged" id="resultLogged"></div>
         </div>
+
+        <button class="download-btn" id="downloadBtn" onclick="downloadVideo()">📥 DOWNLOAD REACTION VIDEO</button>
 
         <div class="legend">
             <div class="legend-title">PUNISHMENTS</div>
@@ -599,6 +737,121 @@
             }
         });
 
+        // Webcam recording variables
+        let mediaStream = null;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let webcamEnabled = false;
+        let recordedBlob = null;
+        let selectedOwner = '';
+
+        const webcamPrompt = document.getElementById('webcamPrompt');
+        const webcamContainer = document.getElementById('webcamContainer');
+        const webcamVideo = document.getElementById('webcamVideo');
+        const recordingIndicator = document.getElementById('recordingIndicator');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        // Show webcam prompt when owner is selected
+        ownerSelect.addEventListener('change', function() {
+            if (this.value) {
+                selectedOwner = this.value;
+                webcamPrompt.classList.add('active');
+                spinBtn.classList.add('disabled');
+                spinBtn.querySelector('.wheel-center-text').innerHTML = 'RECORD<br>FIRST';
+            } else {
+                selectedOwner = '';
+                webcamPrompt.classList.remove('active');
+                webcamContainer.classList.remove('active');
+                spinBtn.classList.add('disabled');
+                spinBtn.querySelector('.wheel-center-text').innerHTML = 'SELECT<br>NAME';
+            }
+        });
+
+        async function enableWebcam() {
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'user' }, 
+                    audio: true 
+                });
+                webcamVideo.srcObject = mediaStream;
+                webcamContainer.classList.add('active');
+                webcamPrompt.classList.remove('active');
+                webcamEnabled = true;
+                
+                spinBtn.classList.remove('disabled');
+                spinBtn.querySelector('.wheel-center-text').innerHTML = 'SPIN!';
+            } catch (err) {
+                console.error('Webcam error:', err);
+                alert('Could not access camera. You can still spin without recording!');
+                skipWebcam();
+            }
+        }
+
+        function skipWebcam() {
+            webcamPrompt.classList.remove('active');
+            webcamEnabled = false;
+            spinBtn.classList.remove('disabled');
+            spinBtn.querySelector('.wheel-center-text').innerHTML = 'SPIN!';
+        }
+
+        function startRecording() {
+            if (!webcamEnabled || !mediaStream) return;
+            
+            recordedChunks = [];
+            
+            const options = { mimeType: 'video/webm;codecs=vp9,opus' };
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                options.mimeType = 'video/webm;codecs=vp8,opus';
+            }
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                options.mimeType = 'video/webm';
+            }
+            
+            try {
+                mediaRecorder = new MediaRecorder(mediaStream, options);
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        recordedChunks.push(event.data);
+                    }
+                };
+                
+                mediaRecorder.onstop = () => {
+                    recordedBlob = new Blob(recordedChunks, { type: 'video/webm' });
+                    downloadBtn.classList.add('active');
+                };
+                
+                mediaRecorder.start();
+                recordingIndicator.style.display = 'flex';
+            } catch (err) {
+                console.error('Recording error:', err);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                recordingIndicator.style.display = 'none';
+            }
+        }
+
+        function downloadVideo() {
+            if (!recordedBlob) return;
+            
+            const ownerName = selectedOwner.replace(/\s+/g, '_');
+            const timestamp = new Date().toISOString().slice(0,10);
+            const filename = `GlassBowl_${ownerName}_Reaction_${timestamp}.webm`;
+            
+            const url = URL.createObjectURL(recordedBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
         // Spin function
         spinBtn.addEventListener('click', function() {
             if (isSpinning || !ownerSelect.value || spinBtn.classList.contains('disabled')) return;
@@ -607,6 +860,11 @@
             spinBtn.classList.add('disabled');
             spinBtn.querySelector('.wheel-center-text').innerHTML = '...';
             resultContainer.classList.remove('show', 'winner');
+            
+            // Start recording if webcam is enabled
+            if (webcamEnabled) {
+                startRecording();
+            }
             
             // Calculate spin: 5-8 full rotations + random landing position
             const extraSpins = (5 + Math.random() * 3) * 360;
@@ -634,6 +892,13 @@
                 
                 fireConfetti();
                 logToSheets(ownerSelect.value, winner);
+                
+                // Stop recording after 3 seconds to capture reaction
+                if (webcamEnabled) {
+                    setTimeout(() => {
+                        stopRecording();
+                    }, 3000);
+                }
                 
                 setTimeout(() => {
                     isSpinning = false;
