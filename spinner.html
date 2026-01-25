@@ -637,8 +637,8 @@
                 
                 setTimeout(() => {
                     isSpinning = false;
-                    spinBtn.classList.remove('disabled');
-                    spinBtn.querySelector('.wheel-center-text').innerHTML = 'SPIN<br>AGAIN';
+                    // Keep button disabled - no re-spins allowed
+                    spinBtn.querySelector('.wheel-center-text').innerHTML = 'DONE';
                 }, 1000);
                 
             }, 4100);
@@ -653,7 +653,7 @@
                 punishment_title: punishment.title
             };
             
-            if (GOOGLE_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbyNG6fgRKhTVN6_JTQdQp03sHwoqaEqGi4zV9FPbfdX2nmxpgTVBF3I_kKzXMOn4TM/exec') {
+            if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
                 console.log('Demo mode - would log:', data);
                 resultLogged.textContent = '✓ Logged (demo mode)';
                 return;
