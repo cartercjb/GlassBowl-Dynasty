@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glass Bowl Dynasty | 2025 Year-End Survey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #e94560;
+            --accent-glow: rgba(233, 69, 96, 0.3);
+            --gold: #f4d03f;
+            --gold-dim: #c9a227;
+            --text: #eaeaea;
+            --text-muted: #8892a0;
+            --card-bg: rgba(22, 33, 62, 0.85);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Source Sans Pro', sans-serif; background: var(--primary); color: var(--text); min-height: 100vh; line-height: 1.6; }
+        .bg-pattern { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 20% 20%, rgba(233, 69, 96, 0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(244, 208, 63, 0.06) 0%, transparent 50%); pointer-events: none; z-index: 0; }
+        .container { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem 4rem; position: relative; z-index: 1; }
+        .header { text-align: center; margin-bottom: 2rem; animation: fadeInDown 0.8s ease-out; }
+        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.15em; background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dim) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.25rem; }
+        .subtitle { font-size: 1rem; color: var(--text-muted); letter-spacing: 0.3em; text-transform: uppercase; font-weight: 600; }
+        .intro { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; backdrop-filter: blur(10px); }
+        .intro p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .intro strong { color: var(--accent); }
+        .scale-legend { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.8rem; }
+        .scale-legend-title { color: var(--gold); font-weight: 700; margin-bottom: 0.5rem; }
+        .scale-legend ul { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.25rem; }
+        .scale-legend li { color: var(--text-muted); }
+        .scale-legend li span { color: var(--accent); font-weight: 700; }
+        .progress-container { background: rgba(255,255,255,0.05); border-radius: 20px; height: 8px; margin-bottom: 0.5rem; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 100%); border-radius: 20px; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 20px var(--accent-glow); }
+        .progress-text { text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+        .section { display: none; animation: fadeInUp 0.5s ease-out; }
+        .section.active { display: block; }
+        .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid rgba(233, 69, 96, 0.3); }
+        .section-number { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--accent); line-height: 1; }
+        .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.05em; color: var(--text); }
+        .section-desc { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .question-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; backdrop-filter: blur(10px); transition: all 0.3s ease; }
+        .question-card:hover { border-color: rgba(233, 69, 96, 0.3); }
+        .question-card.subsection { background: rgba(244, 208, 63, 0.05); border-color: rgba(244, 208, 63, 0.2); }
+        .subsection-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--gold); margin-bottom: 1rem; letter-spacing: 0.05em; }
+        .question-label { font-weight: 600; margin-bottom: 0.75rem; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 0.5rem; }
+        .question-label .q-num { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+        .question-context { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+        .rating-container { padding: 0.25rem 0; }
+        .rating-labels { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.7rem; color: var(--text-muted); }
+        .rating-slider { display: flex; gap: 0.4rem; }
+        .rating-btn { flex: 1; min-width: 36px; padding: 0.6rem 0.25rem; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text-muted); font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; }
+        .rating-btn:hover { background: rgba(233, 69, 96, 0.15); border-color: var(--accent); color: var(--text); }
+        .rating-btn.selected { background: var(--accent); border-color: var(--accent); color: white; box-shadow: 0 0 15px var(--accent-glow); }
+        .choice-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .choice-btn { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.08); border-radius: 8px; color: var(--text); font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; text-align: left; }
+        .choice-btn:hover { background: rgba(233, 69, 96, 0.1); border-color: rgba(233, 69, 96, 0.4); }
+        .choice-btn.selected { background: rgba(233, 69, 96, 0.15); border-color: var(--accent); }
+        .choice-indicator { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s ease; }
+        .choice-btn.selected .choice-indicator { background: var(--accent); border-color: var(--accent); }
+        .choice-btn.selected .choice-indicator::after { content: ''; width: 6px; height: 6px; background: white; border-radius: 50%; }
+        .checkbox-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.4rem; }
+        .checkbox-btn { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0.8rem; background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.08); border-radius: 8px; color: var(--text); font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; text-align: left; }
+        .checkbox-btn:hover { background: rgba(233, 69, 96, 0.1); border-color: rgba(233, 69, 96, 0.4); }
+        .checkbox-btn.selected { background: rgba(233, 69, 96, 0.15); border-color: var(--accent); }
+        .checkbox-indicator { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s ease; }
+        .checkbox-btn.selected .checkbox-indicator { background: var(--accent); border-color: var(--accent); }
+        .checkbox-btn.selected .checkbox-indicator::after { content: '✓'; color: white; font-size: 0.7rem; font-weight: bold; }
+        textarea { width: 100%; min-height: 80px; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 0.9rem; resize: vertical; transition: all 0.3s ease; }
+        textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+        textarea::placeholder { color: var(--text-muted); }
+        input[type="text"] { width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 0.9rem; transition: all 0.3s ease; }
+        input[type="text"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+        .nav-buttons { display: flex; gap: 1rem; margin-top: 2rem; }
+        .btn { flex: 1; padding: 0.9rem 1.5rem; border: none; border-radius: 10px; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s ease; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: var(--text); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+        .btn-primary { background: linear-gradient(135deg, var(--accent) 0%, #c0392b 100%); color: white; box-shadow: 0 4px 20px var(--accent-glow); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 30px var(--accent-glow); }
+        .btn-submit { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dim) 100%); color: var(--primary); }
+        .btn-submit:hover { box-shadow: 0 6px 30px rgba(244, 208, 63, 0.4); }
+        .success-screen { display: none; text-align: center; padding: 4rem 2rem; animation: fadeInUp 0.8s ease-out; }
+        .success-screen.active { display: block; }
+        .trophy { font-size: 5rem; margin-bottom: 1.5rem; animation: bounce 1s ease infinite; }
+        .success-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 1rem; }
+        .success-message { color: var(--text-muted); font-size: 1.1rem; max-width: 400px; margin: 0 auto; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .loading-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(26, 26, 46, 0.95); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; gap: 1.5rem; }
+        .loading-overlay.active { display: flex; }
+        .spinner { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 600px) { .logo { font-size: 2.2rem; } .container { padding: 1.5rem 1rem 3rem; } .rating-btn { padding: 0.5rem 0.2rem; font-size: 0.8rem; min-width: 28px; } .checkbox-group { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div style="color: var(--text-muted);">Submitting your feedback...</div></div>
+    <div class="container">
+        <header class="header">
+            <div class="logo">GLASS BOWL DYNASTY</div>
+            <div class="subtitle">2025 Year-End Survey</div>
+        </header>
+        <div class="intro" id="introBox">
+            <p>Your feedback shapes the future of this league. Please respond <strong>honestly</strong> to each question.</p>
+            <div class="scale-legend">
+                <div class="scale-legend-title">Rating Scale Guide:</div>
+                <ul>
+                    <li><span>1</span> = Significant problems</li>
+                    <li><span>2</span> = Some issues</li>
+                    <li><span>3</span> = Acceptable</li>
+                    <li><span>4</span> = Good</li>
+                    <li><span>5</span> = Excellent</li>
+                </ul>
+            </div>
+        </div>
+        <div class="progress-container"><div class="progress-bar" id="progressBar" style="width: 8%"></div></div>
+        <div class="progress-text" id="progressText">Section 1 of 12</div>
+        <form id="surveyForm">
+
+            <div class="section active" data-section="1">
+                <div class="section-header">
+                    <div class="section-number">01</div>
+                    <div class="section-title">ROSTER & LINEUP SETTINGS</div>
+                </div><div class="section-desc">Current: 1 QB, 2 RB, 3 WR, 1 TE, 2 FLEX, 1 SF, 1 K, 2 DL, 2 LB, 2 DB (17 starters), 10 bench, 3 IR = 30 total</div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q1.1</span>
+                        <span>How satisfied are you with the starting lineup spots, bench size, IR slots overall?</span>
+                    </div><div class="rating-container">
+                <div class="rating-labels"><span>Significant problems</span><span>Excellent</span></div>
+                <div class="rating-slider" data-question="q1_1">
+                    <button type="button" class="rating-btn" data-value="1">1</button>
+                    <button type="button" class="rating-btn" data-value="2">2</button>
+                    <button type="button" class="rating-btn" data-value="3">3</button>
+                    <button type="button" class="rating-btn" data-value="4">4</button>
+                    <button type="button" class="rating-btn" data-value="5">5</button>
+                </div>
+            </div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q1.2</span>
+                        <span>Should we add or remove any starting positions?</span>
+                    </div><div class="checkbox-group" data-question="q1_2" data-type="multi"><button type="button" class="checkbox-btn" data-value="Add 2nd QB (2QB instead of SF)"><span class="checkbox-indicator"></span>Add 2nd QB (2QB instead of SF)</button><button type="button" class="checkbox-btn" data-value="Add 3rd RB"><span class="checkbox-indicator"></span>Add 3rd RB</button><button type="button" class="checkbox-btn" data-value="Add 4th WR"><span class="checkbox-indicator"></span>Add 4th WR</button><button type="button" class="checkbox-btn" data-value="Remove Kicker"><span class="checkbox-indicator"></span>Remove Kicker</button><button type="button" class="checkbox-btn" data-value="Remove/reduce IDP"><span class="checkbox-indicator"></span>Remove/reduce IDP</button><button type="button" class="checkbox-btn" data-value="Add team DEF/ST"><span class="checkbox-indicator"></span>Add team DEF/ST</button><button type="button" class="checkbox-btn" data-value="Add more FLEX"><span class="checkbox-indicator"></span>Add more FLEX</button><button type="button" class="checkbox-btn" data-value="No changes needed"><span class="checkbox-indicator"></span>No changes needed</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q1.3</span>
+                        <span>Comments on starting lineup configuration:</span>
+                    </div><textarea name="q1_3" placeholder="Your thoughts..."></textarea></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q1.4</span>
+                        <span>How satisfied are you with the overall roster size?</span>
+                    </div><div class="choice-group" data-question="q1_4"><button type="button" class="choice-btn" data-value="1 - Too small, not enough depth"><span class="choice-indicator"></span>1 - Too small, not enough depth</button><button type="button" class="choice-btn" data-value="2 - Slightly too small"><span class="choice-indicator"></span>2 - Slightly too small</button><button type="button" class="choice-btn" data-value="3 - Just right"><span class="choice-indicator"></span>3 - Just right</button><button type="button" class="choice-btn" data-value="4 - Slightly too large"><span class="choice-indicator"></span>4 - Slightly too large</button><button type="button" class="choice-btn" data-value="5 - Too large, waiver wire is barren"><span class="choice-indicator"></span>5 - Too large, waiver wire is barren</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q1.5</span>
+                        <span>Were 3 IR spots sufficient this season?</span>
+                    </div><div class="choice-group" data-question="q1_5"><button type="button" class="choice-btn" data-value="Yes"><span class="choice-indicator"></span>Yes</button><button type="button" class="choice-btn" data-value="No, need more"><span class="choice-indicator"></span>No, need more</button><button type="button" class="choice-btn" data-value="Too many, reduce to 2"><span class="choice-indicator"></span>Too many, reduce to 2</button><button type="button" class="choice-btn" data-value="No opinion"><span class="choice-indicator"></span>No opinion</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q1.6</span>
+                        <span>Comments on roster size/bench depth:</span>
+                    </div><textarea name="q1_6" placeholder="Your thoughts..."></textarea></div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-primary" onclick="nextSection()">CONTINUE →</button>
+                </div></div>
+            <div class="section" data-section="2">
+                <div class="section-header">
+                    <div class="section-number">02</div>
+                    <div class="section-title">IDP (INDIVIDUAL DEFENSIVE PLAYERS)</div>
+                </div><div class="section-desc">Current IDP Setup: 2 DL, 2 LB, 2 DB (6 total IDP starters)</div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q1.7</span>
+                        <span>How engaged were you with managing your IDP roster?</span>
+                    </div><div class="choice-group" data-question="q1_7"><button type="button" class="choice-btn" data-value="Very engaged - enjoyed the strategy"><span class="choice-indicator"></span>Very engaged - enjoyed the strategy</button><button type="button" class="choice-btn" data-value="Somewhat engaged - added some depth"><span class="choice-indicator"></span>Somewhat engaged - added some depth</button><button type="button" class="choice-btn" data-value="Neutral - set it and forgot it"><span class="choice-indicator"></span>Neutral - set it and forgot it</button><button type="button" class="choice-btn" data-value="Disengaged - felt like a chore"><span class="choice-indicator"></span>Disengaged - felt like a chore</button><button type="button" class="choice-btn" data-value="Actively disliked it"><span class="choice-indicator"></span>Actively disliked it</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q1.8</span>
+                        <span>Did IDP scoring feel balanced relative to offensive players?</span>
+                    </div><div class="choice-group" data-question="q1_8"><button type="button" class="choice-btn" data-value="IDP scored too high (overshadowed offense)"><span class="choice-indicator"></span>IDP scored too high (overshadowed offense)</button><button type="button" class="choice-btn" data-value="IDP scoring was well balanced"><span class="choice-indicator"></span>IDP scoring was well balanced</button><button type="button" class="choice-btn" data-value="IDP scored too low (felt meaningless)"><span class="choice-indicator"></span>IDP scored too low (felt meaningless)</button><button type="button" class="choice-btn" data-value="Unsure"><span class="choice-indicator"></span>Unsure</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q1.9</span>
+                        <span>Should we adjust IDP configuration?</span>
+                    </div><div class="choice-group" data-question="q1_9"><button type="button" class="choice-btn" data-value="Expand IDP (add more starters)"><span class="choice-indicator"></span>Expand IDP (add more starters)</button><button type="button" class="choice-btn" data-value="Keep as is"><span class="choice-indicator"></span>Keep as is</button><button type="button" class="choice-btn" data-value="Reduce IDP (fewer starters)"><span class="choice-indicator"></span>Reduce IDP (fewer starters)</button><button type="button" class="choice-btn" data-value="Eliminate IDP entirely"><span class="choice-indicator"></span>Eliminate IDP entirely</button><button type="button" class="choice-btn" data-value="Replace with team DEF"><span class="choice-indicator"></span>Replace with team DEF</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q1.10</span>
+                        <span>Specific comments on IDP:</span>
+                    </div><textarea name="q1_10" placeholder="Your thoughts..."></textarea></div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection()">← BACK</button>
+                    <button type="button" class="btn btn-primary" onclick="nextSection()">CONTINUE →</button>
+                </div></div>
+            <div class="section" data-section="3">
+                <div class="section-header">
+                    <div class="section-number">03</div>
+                    <div class="section-title">TRADING EXPERIENCE</div>
+                </div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q2.1</span>
+                        <span>How would you rate your overall trading experience this season?</span>
+                    </div><div class="rating-container">
+                <div class="rating-labels"><span>Very poor</span><span>Excellent</span></div>
+                <div class="rating-slider" data-question="q2_1">
+                    <button type="button" class="rating-btn" data-value="1">1</button>
+                    <button type="button" class="rating-btn" data-value="2">2</button>
+                    <button type="button" class="rating-btn" data-value="3">3</button>
+                    <button type="button" class="rating-btn" data-value="4">4</button>
+                    <button type="button" class="rating-btn" data-value="5">5</button>
+                </div>
+            </div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q2.2</span>
+                        <span>Trading was a meaningful method to improve my team throughout the year.</span>
+                    </div><div class="rating-container">
+                <div class="rating-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+                <div class="rating-slider" data-question="q2_2">
+                    <button type="button" class="rating-btn" data-value="1">1</button>
+                    <button type="button" class="rating-btn" data-value="2">2</button>
+                    <button type="button" class="rating-btn" data-value="3">3</button>
+                    <button type="button" class="rating-btn" data-value="4">4</button>
+                    <button type="button" class="rating-btn" data-value="5">5</button>
+                </div>
+            </div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q2.3</span>
+                        <span>Next season I would prefer to trade ______ compared to this season.</span>
+                    </div><div class="choice-group" data-question="q2_3"><button type="button" class="choice-btn" data-value="More"><span class="choice-indicator"></span>More</button><button type="button" class="choice-btn" data-value="The same"><span class="choice-indicator"></span>The same</button><button type="button" class="choice-btn" data-value="Less"><span class="choice-indicator"></span>Less</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q2.4</span>
+                        <span>Did you feel the trade deadline timing was appropriate?</span>
+                    </div><div class="choice-group" data-question="q2_4"><button type="button" class="choice-btn" data-value="Yes, it was fair"><span class="choice-indicator"></span>Yes, it was fair</button><button type="button" class="choice-btn" data-value="No, deadline was too early"><span class="choice-indicator"></span>No, deadline was too early</button><button type="button" class="choice-btn" data-value="No, deadline was too late"><span class="choice-indicator"></span>No, deadline was too late</button><button type="button" class="choice-btn" data-value="Didn't pay attention to the deadline"><span class="choice-indicator"></span>Didn't pay attention to the deadline</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q2.5</span>
+                        <span>Should there be a weekly trade deadline (no trades after games start)?</span>
+                    </div><div class="choice-group" data-question="q2_5"><button type="button" class="choice-btn" data-value="Yes"><span class="choice-indicator"></span>Yes</button><button type="button" class="choice-btn" data-value="No"><span class="choice-indicator"></span>No</button><button type="button" class="choice-btn" data-value="No opinion"><span class="choice-indicator"></span>No opinion</button></div></div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection()">← BACK</button>
+                    <button type="button" class="btn btn-primary" onclick="nextSection()">CONTINUE →</button>
+                </div></div>
+            <div class="section" data-section="4">
+                <div class="section-header">
+                    <div class="section-number">04</div>
+                    <div class="section-title">WAIVER WIRE & FREE AGENCY</div>
+                </div><div class="section-desc">Current: Inverse standings (resets weekly), Daily 12PM processing, 2-day hold, 'Boyers Rule' for Sunday emergencies</div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q3.1</span>
+                        <span>How satisfied are you with the waiver system overall?</span>
+                    </div><div class="rating-container">
+                <div class="rating-labels"><span>Significant problems</span><span>Excellent</span></div>
+                <div class="rating-slider" data-question="q3_1">
+                    <button type="button" class="rating-btn" data-value="1">1</button>
+                    <button type="button" class="rating-btn" data-value="2">2</button>
+                    <button type="button" class="rating-btn" data-value="3">3</button>
+                    <button type="button" class="rating-btn" data-value="4">4</button>
+                    <button type="button" class="rating-btn" data-value="5">5</button>
+                </div>
+            </div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q3.2</span>
+                        <span>Should we add FAAB (Free Agent Acquisition Budget)?</span>
+                    </div><div class="choice-group" data-question="q3_2"><button type="button" class="choice-btn" data-value="Yes, prefer FAAB"><span class="choice-indicator"></span>Yes, prefer FAAB</button><button type="button" class="choice-btn" data-value="No, keep inverse standings"><span class="choice-indicator"></span>No, keep inverse standings</button><button type="button" class="choice-btn" data-value="Unsure / Need more info"><span class="choice-indicator"></span>Unsure / Need more info</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q3.3</span>
+                        <span>Was the 'Boyers Rule' (Sunday FA window) helpful?</span>
+                    </div><div class="choice-group" data-question="q3_3"><button type="button" class="choice-btn" data-value="Yes, used it and appreciated it"><span class="choice-indicator"></span>Yes, used it and appreciated it</button><button type="button" class="choice-btn" data-value="Yes, but didn't need to use it"><span class="choice-indicator"></span>Yes, but didn't need to use it</button><button type="button" class="choice-btn" data-value="No, it created unfair advantages"><span class="choice-indicator"></span>No, it created unfair advantages</button><button type="button" class="choice-btn" data-value="Didn't know about it"><span class="choice-indicator"></span>Didn't know about it</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q3.4</span>
+                        <span>Was the 2-day waiver hold period appropriate?</span>
+                    </div><div class="choice-group" data-question="q3_4"><button type="button" class="choice-btn" data-value="Too long"><span class="choice-indicator"></span>Too long</button><button type="button" class="choice-btn" data-value="Just right"><span class="choice-indicator"></span>Just right</button><button type="button" class="choice-btn" data-value="Too short"><span class="choice-indicator"></span>Too short</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q3.5</span>
+                        <span>Specific comments on waivers/free agency:</span>
+                    </div><textarea name="q3_5" placeholder="Your thoughts..."></textarea></div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection()">← BACK</button>
+                    <button type="button" class="btn btn-primary" onclick="nextSection()">CONTINUE →</button>
+                </div></div>
+            <div class="section" data-section="5">
+                <div class="section-header">
+                    <div class="section-number">05</div>
+                    <div class="section-title">SCORING SYSTEM</div>
+                </div><div class="section-desc">Current: 1.0 PPR, Kickers included, IDP scoring</div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q4.1</span>
+                        <span>Rate the overall balance of offensive scoring:</span>
+                    </div><div class="rating-container">
+                <div class="rating-labels"><span>Major imbalances</span><span>Excellent balance</span></div>
+                <div class="rating-slider" data-question="q4_1">
+                    <button type="button" class="rating-btn" data-value="1">1</button>
+                    <button type="button" class="rating-btn" data-value="2">2</button>
+                    <button type="button" class="rating-btn" data-value="3">3</button>
+                    <button type="button" class="rating-btn" data-value="4">4</button>
+                    <button type="button" class="rating-btn" data-value="5">5</button>
+                </div>
+            </div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q4.2</span>
+                        <span>Which positions felt OVERVALUED in scoring?</span>
+                    </div><div class="checkbox-group" data-question="q4_2" data-type="multi"><button type="button" class="checkbox-btn" data-value="QB"><span class="checkbox-indicator"></span>QB</button><button type="button" class="checkbox-btn" data-value="RB"><span class="checkbox-indicator"></span>RB</button><button type="button" class="checkbox-btn" data-value="WR"><span class="checkbox-indicator"></span>WR</button><button type="button" class="checkbox-btn" data-value="TE"><span class="checkbox-indicator"></span>TE</button><button type="button" class="checkbox-btn" data-value="K"><span class="checkbox-indicator"></span>K</button><button type="button" class="checkbox-btn" data-value="None - scoring felt balanced"><span class="checkbox-indicator"></span>None - scoring felt balanced</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q4.3</span>
+                        <span>Which positions felt UNDERVALUED in scoring?</span>
+                    </div><div class="checkbox-group" data-question="q4_3" data-type="multi"><button type="button" class="checkbox-btn" data-value="QB"><span class="checkbox-indicator"></span>QB</button><button type="button" class="checkbox-btn" data-value="RB"><span class="checkbox-indicator"></span>RB</button><button type="button" class="checkbox-btn" data-value="WR"><span class="checkbox-indicator"></span>WR</button><button type="button" class="checkbox-btn" data-value="TE"><span class="checkbox-indicator"></span>TE</button><button type="button" class="checkbox-btn" data-value="K"><span class="checkbox-indicator"></span>K</button><button type="button" class="checkbox-btn" data-value="None - scoring felt balanced"><span class="checkbox-indicator"></span>None - scoring felt balanced</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q4.4</span>
+                        <span>PPR is currently 1.0 points per reception. Should this change?</span>
+                    </div><div class="choice-group" data-question="q4_4"><button type="button" class="choice-btn" data-value="Increase to 1.5 PPR"><span class="choice-indicator"></span>Increase to 1.5 PPR</button><button type="button" class="choice-btn" data-value="Keep at 1.0 PPR"><span class="choice-indicator"></span>Keep at 1.0 PPR</button><button type="button" class="choice-btn" data-value="Reduce to 0.5 PPR"><span class="choice-indicator"></span>Reduce to 0.5 PPR</button><button type="button" class="choice-btn" data-value="Eliminate PPR entirely"><span class="choice-indicator"></span>Eliminate PPR entirely</button><button type="button" class="choice-btn" data-value="No opinion"><span class="choice-indicator"></span>No opinion</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q4.5</span>
+                        <span>Should we implement TE Premium (additional PPR for TEs)?</span>
+                    </div><div class="choice-group" data-question="q4_5"><button type="button" class="choice-btn" data-value="Yes, +0.5 per TE reception"><span class="choice-indicator"></span>Yes, +0.5 per TE reception</button><button type="button" class="choice-btn" data-value="Yes, +1.0 per TE reception"><span class="choice-indicator"></span>Yes, +1.0 per TE reception</button><button type="button" class="choice-btn" data-value="No, keep TE scoring as is"><span class="choice-indicator"></span>No, keep TE scoring as is</button><button type="button" class="choice-btn" data-value="No opinion"><span class="choice-indicator"></span>No opinion</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q4.6</span>
+                        <span>How do you feel about keeping Kickers?</span>
+                    </div><div class="choice-group" data-question="q4_6"><button type="button" class="choice-btn" data-value="Love it - adds strategy"><span class="choice-indicator"></span>Love it - adds strategy</button><button type="button" class="choice-btn" data-value="Neutral"><span class="choice-indicator"></span>Neutral</button><button type="button" class="choice-btn" data-value="Dislike - too random"><span class="choice-indicator"></span>Dislike - too random</button><button type="button" class="choice-btn" data-value="Strongly dislike - want kickers removed"><span class="choice-indicator"></span>Strongly dislike - want kickers removed</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q4.7</span>
+                        <span>Was the -5 for missed PAT too harsh?</span>
+                    </div><div class="choice-group" data-question="q4_7"><button type="button" class="choice-btn" data-value="Yes, reduce penalty"><span class="choice-indicator"></span>Yes, reduce penalty</button><button type="button" class="choice-btn" data-value="No, keep as is"><span class="choice-indicator"></span>No, keep as is</button><button type="button" class="choice-btn" data-value="No opinion"><span class="choice-indicator"></span>No opinion</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q4.8</span>
+                        <span>Rate the IDP scoring balance:</span>
+                    </div><div class="rating-container">
+                <div class="rating-labels"><span>Major issues</span><span>Excellent</span></div>
+                <div class="rating-slider" data-question="q4_8">
+                    <button type="button" class="rating-btn" data-value="1">1</button>
+                    <button type="button" class="rating-btn" data-value="2">2</button>
+                    <button type="button" class="rating-btn" data-value="3">3</button>
+                    <button type="button" class="rating-btn" data-value="4">4</button>
+                    <button type="button" class="rating-btn" data-value="5">5</button>
+                </div>
+            </div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q4.10</span>
+                        <span>Specific comments on scoring system:</span>
+                    </div><textarea name="q4_10" placeholder="Your thoughts..."></textarea></div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection()">← BACK</button>
+                    <button type="button" class="btn btn-primary" onclick="nextSection()">CONTINUE →</button>
+                </div></div>
+            <div class="section" data-section="6">
+                <div class="section-header">
+                    <div class="section-number">06</div>
+                    <div class="section-title">REGULAR SEASON FORMAT</div>
+                </div><div class="section-desc">Current: 14-week regular season, no divisions, 6 teams make playoffs</div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q5.1</span>
+                        <span>How satisfied were you with the regular season length?</span>
+                    </div><div class="choice-group" data-question="q5_1"><button type="button" class="choice-btn" data-value="1 - Too short"><span class="choice-indicator"></span>1 - Too short</button><button type="button" class="choice-btn" data-value="3 - Just right"><span class="choice-indicator"></span>3 - Just right</button><button type="button" class="choice-btn" data-value="5 - Too long"><span class="choice-indicator"></span>5 - Too long</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q5.2</span>
+                        <span>Should we implement divisions?</span>
+                    </div><div class="choice-group" data-question="q5_2"><button type="button" class="choice-btn" data-value="Yes, create 2 divisions"><span class="choice-indicator"></span>Yes, create 2 divisions</button><button type="button" class="choice-btn" data-value="Yes, create 3 divisions"><span class="choice-indicator"></span>Yes, create 3 divisions</button><button type="button" class="choice-btn" data-value="No, keep league-wide standings"><span class="choice-indicator"></span>No, keep league-wide standings</button><button type="button" class="choice-btn" data-value="No opinion"><span class="choice-indicator"></span>No opinion</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q5.3</span>
+                        <span>Specific comments on regular season format:</span>
+                    </div><textarea name="q5_3" placeholder="Your thoughts..."></textarea></div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection()">← BACK</button>
+                    <button type="button" class="btn btn-primary" onclick="nextSection()">CONTINUE →</button>
+                </div></div>
+            <div class="section" data-section="7">
+                <div class="section-header">
+                    <div class="section-number">07</div>
+                    <div class="section-title">PLAYOFFS & POSTSEASON</div>
+                </div><div class="section-desc">Current: 6 teams qualify, Week 15-17 playoffs, 1 week per round, Toilet Bowl for non-playoff teams</div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q6.1</span>
+                        <span>Is 6 playoff teams the right number?</span>
+                    </div><div class="choice-group" data-question="q6_1"><button type="button" class="choice-btn" data-value="Too few - expand to 8"><span class="choice-indicator"></span>Too few - expand to 8</button><button type="button" class="choice-btn" data-value="Just right at 6"><span class="choice-indicator"></span>Just right at 6</button><button type="button" class="choice-btn" data-value="Too many - reduce to 4"><span class="choice-indicator"></span>Too many - reduce to 4</button><button type="button" class="choice-btn" data-value="No opinion"><span class="choice-indicator"></span>No opinion</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q6.2</span>
+                        <span>Are the playoff weeks (15-17) appropriate?</span>
+                    </div><div class="choice-group" data-question="q6_2"><button type="button" class="choice-btn" data-value="Yes, timing was good"><span class="choice-indicator"></span>Yes, timing was good</button><button type="button" class="choice-btn" data-value="Should end earlier (avoid Week 17)"><span class="choice-indicator"></span>Should end earlier (avoid Week 17)</button><button type="button" class="choice-btn" data-value="Should use different weeks"><span class="choice-indicator"></span>Should use different weeks</button><button type="button" class="choice-btn" data-value="No opinion"><span class="choice-indicator"></span>No opinion</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q6.3</span>
+                        <span>Should playoff matchups be 1 week or 2 weeks?</span>
+                    </div><div class="choice-group" data-question="q6_3"><button type="button" class="choice-btn" data-value="Keep 1-week matchups"><span class="choice-indicator"></span>Keep 1-week matchups</button><button type="button" class="choice-btn" data-value="Move to 2-week cumulative"><span class="choice-indicator"></span>Move to 2-week cumulative</button><button type="button" class="choice-btn" data-value="No opinion"><span class="choice-indicator"></span>No opinion</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q6.4</span>
+                        <span>Were the seeding tiebreakers fair and clearly understood?</span>
+                    </div><div class="choice-group" data-question="q6_4"><button type="button" class="choice-btn" data-value="Yes"><span class="choice-indicator"></span>Yes</button><button type="button" class="choice-btn" data-value="No"><span class="choice-indicator"></span>No</button><button type="button" class="choice-btn" data-value="Didn't need them"><span class="choice-indicator"></span>Didn't need them</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q6.5</span>
+                        <span>How engaged were you with the Toilet Bowl (if applicable)?</span>
+                    </div><div class="choice-group" data-question="q6_5"><button type="button" class="choice-btn" data-value="Very engaged - competed hard to avoid last"><span class="choice-indicator"></span>Very engaged - competed hard to avoid last</button><button type="button" class="choice-btn" data-value="Somewhat engaged"><span class="choice-indicator"></span>Somewhat engaged</button><button type="button" class="choice-btn" data-value="Not engaged at all"><span class="choice-indicator"></span>Not engaged at all</button><button type="button" class="choice-btn" data-value="N/A - made playoffs"><span class="choice-indicator"></span>N/A - made playoffs</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q6.6</span>
+                        <span>Are the punishment options appropriate and fair?</span>
+                    </div><div class="choice-group" data-question="q6_6"><button type="button" class="choice-btn" data-value="Yes, good variety"><span class="choice-indicator"></span>Yes, good variety</button><button type="button" class="choice-btn" data-value="Some punishments are too harsh"><span class="choice-indicator"></span>Some punishments are too harsh</button><button type="button" class="choice-btn" data-value="Some punishments are too mild"><span class="choice-indicator"></span>Some punishments are too mild</button><button type="button" class="choice-btn" data-value="Need different options entirely"><span class="choice-indicator"></span>Need different options entirely</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q6.7</span>
+                        <span>Should the Toilet Bowl Champion choose their punishment?</span>
+                    </div><div class="choice-group" data-question="q6_7"><button type="button" class="choice-btn" data-value="Let them choose (current)"><span class="choice-indicator"></span>Let them choose (current)</button><button type="button" class="choice-btn" data-value="Randomly assigned"><span class="choice-indicator"></span>Randomly assigned</button><button type="button" class="choice-btn" data-value="Championship Winner chooses for them"><span class="choice-indicator"></span>Championship Winner chooses for them</button><button type="button" class="choice-btn" data-value="League vote decides"><span class="choice-indicator"></span>League vote decides</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q6.8</span>
+                        <span>Suggest any new punishment ideas:</span>
+                    </div><textarea name="q6_8" placeholder="Your thoughts..."></textarea></div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection()">← BACK</button>
+                    <button type="button" class="btn btn-primary" onclick="nextSection()">CONTINUE →</button>
+                </div></div>
+            <div class="section" data-section="8">
+                <div class="section-header">
+                    <div class="section-number">08</div>
+                    <div class="section-title">LEAGUE FEES & PAYOUTS</div>
+                </div><div class="section-desc">Current: $250 entry → Champion 45%, Runner-up 16%, Playoff split 14%, Weekly bets 15%, Reserve Fund 10%</div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q7.1</span>
+                        <span>Is the $250 entry fee appropriate?</span>
+                    </div><div class="choice-group" data-question="q7_1"><button type="button" class="choice-btn" data-value="Too high"><span class="choice-indicator"></span>Too high</button><button type="button" class="choice-btn" data-value="Just right"><span class="choice-indicator"></span>Just right</button><button type="button" class="choice-btn" data-value="Too low"><span class="choice-indicator"></span>Too low</button><button type="button" class="choice-btn" data-value="No opinion"><span class="choice-indicator"></span>No opinion</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q7.2</span>
+                        <span>Rate your satisfaction with the payout structure:</span>
+                    </div><div class="rating-container">
+                <div class="rating-labels"><span>Major issues</span><span>Excellent</span></div>
+                <div class="rating-slider" data-question="q7_2">
+                    <button type="button" class="rating-btn" data-value="1">1</button>
+                    <button type="button" class="rating-btn" data-value="2">2</button>
+                    <button type="button" class="rating-btn" data-value="3">3</button>
+                    <button type="button" class="rating-btn" data-value="4">4</button>
+                    <button type="button" class="rating-btn" data-value="5">5</button>
+                </div>
+            </div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q7.3</span>
+                        <span>Should we adjust payouts?</span>
+                    </div><div class="checkbox-group" data-question="q7_3" data-type="multi"><button type="button" class="checkbox-btn" data-value="Increase Champion payout"><span class="checkbox-indicator"></span>Increase Champion payout</button><button type="button" class="checkbox-btn" data-value="Decrease Champion payout"><span class="checkbox-indicator"></span>Decrease Champion payout</button><button type="button" class="checkbox-btn" data-value="Add 3rd place payout"><span class="checkbox-indicator"></span>Add 3rd place payout</button><button type="button" class="checkbox-btn" data-value="Increase weekly bets"><span class="checkbox-indicator"></span>Increase weekly bets</button><button type="button" class="checkbox-btn" data-value="Decrease weekly bets"><span class="checkbox-indicator"></span>Decrease weekly bets</button><button type="button" class="checkbox-btn" data-value="Change Reserve Fund %"><span class="checkbox-indicator"></span>Change Reserve Fund %</button><button type="button" class="checkbox-btn" data-value="No changes needed"><span class="checkbox-indicator"></span>No changes needed</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q7.4</span>
+                        <span>How did the weekly bets work out?</span>
+                    </div><div class="choice-group" data-question="q7_4"><button type="button" class="choice-btn" data-value="Loved them - dial it up!"><span class="choice-indicator"></span>Loved them - dial it up!</button><button type="button" class="choice-btn" data-value="Perfect as is"><span class="choice-indicator"></span>Perfect as is</button><button type="button" class="choice-btn" data-value="Somewhat engaging"><span class="choice-indicator"></span>Somewhat engaging</button><button type="button" class="choice-btn" data-value="Didn't pay attention"><span class="choice-indicator"></span>Didn't pay attention</button><button type="button" class="choice-btn" data-value="Didn't like them"><span class="choice-indicator"></span>Didn't like them</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q7.5</span>
+                        <span>Specific comments on fees/payouts:</span>
+                    </div><textarea name="q7_5" placeholder="Your thoughts..."></textarea></div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection()">← BACK</button>
+                    <button type="button" class="btn btn-primary" onclick="nextSection()">CONTINUE →</button>
+                </div></div>
+            <div class="section" data-section="9">
+                <div class="section-header">
+                    <div class="section-number">09</div>
+                    <div class="section-title">DRAFTING & COMMISSIONER</div>
+                </div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q8.1</span>
+                        <span>Should we implement a rookie draft lottery for non-playoff teams?</span>
+                    </div><div class="choice-group" data-question="q8_1"><button type="button" class="choice-btn" data-value="Yes, adds excitement and reduces tanking"><span class="choice-indicator"></span>Yes, adds excitement and reduces tanking</button><button type="button" class="choice-btn" data-value="No, keep inverse standings"><span class="choice-indicator"></span>No, keep inverse standings</button><button type="button" class="choice-btn" data-value="Unsure"><span class="choice-indicator"></span>Unsure</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q9.1</span>
+                        <span>Rate The Commissioner's overall performance:</span>
+                    </div><div class="rating-container">
+                <div class="rating-labels"><span>Major issues</span><span>Excellent</span></div>
+                <div class="rating-slider" data-question="q9_1">
+                    <button type="button" class="rating-btn" data-value="1">1</button>
+                    <button type="button" class="rating-btn" data-value="2">2</button>
+                    <button type="button" class="rating-btn" data-value="3">3</button>
+                    <button type="button" class="rating-btn" data-value="4">4</button>
+                    <button type="button" class="rating-btn" data-value="5">5</button>
+                </div>
+            </div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q9.2</span>
+                        <span>Was communication from The Commissioner timely and clear?</span>
+                    </div><div class="choice-group" data-question="q9_2"><button type="button" class="choice-btn" data-value="Yes"><span class="choice-indicator"></span>Yes</button><button type="button" class="choice-btn" data-value="Mostly yes"><span class="choice-indicator"></span>Mostly yes</button><button type="button" class="choice-btn" data-value="Sometimes"><span class="choice-indicator"></span>Sometimes</button><button type="button" class="choice-btn" data-value="Rarely"><span class="choice-indicator"></span>Rarely</button><button type="button" class="choice-btn" data-value="No"><span class="choice-indicator"></span>No</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q9.3</span>
+                        <span>Were rules clearly explained and consistently enforced?</span>
+                    </div><div class="choice-group" data-question="q9_3"><button type="button" class="choice-btn" data-value="Yes"><span class="choice-indicator"></span>Yes</button><button type="button" class="choice-btn" data-value="Mostly"><span class="choice-indicator"></span>Mostly</button><button type="button" class="choice-btn" data-value="Sometimes"><span class="choice-indicator"></span>Sometimes</button><button type="button" class="choice-btn" data-value="No"><span class="choice-indicator"></span>No</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q9.4</span>
+                        <span>Specific feedback for The Commissioner:</span>
+                    </div><textarea name="q9_4" placeholder="Your thoughts..."></textarea></div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection()">← BACK</button>
+                    <button type="button" class="btn btn-primary" onclick="nextSection()">CONTINUE →</button>
+                </div></div>
+            <div class="section" data-section="10">
+                <div class="section-header">
+                    <div class="section-number">10</div>
+                    <div class="section-title">OWNER ENGAGEMENT & CULTURE</div>
+                </div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q10.1</span>
+                        <span>How would you rate the overall league culture and banter?</span>
+                    </div><div class="rating-container">
+                <div class="rating-labels"><span>Needs improvement</span><span>Exceeded expectations</span></div>
+                <div class="rating-slider" data-question="q10_1">
+                    <button type="button" class="rating-btn" data-value="1">1</button>
+                    <button type="button" class="rating-btn" data-value="2">2</button>
+                    <button type="button" class="rating-btn" data-value="3">3</button>
+                    <button type="button" class="rating-btn" data-value="4">4</button>
+                    <button type="button" class="rating-btn" data-value="5">5</button>
+                </div>
+            </div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q10.2</span>
+                        <span>Did all owners meet minimum engagement expectations?</span>
+                    </div><div class="choice-group" data-question="q10_2"><button type="button" class="choice-btn" data-value="Yes, everyone was active"><span class="choice-indicator"></span>Yes, everyone was active</button><button type="button" class="choice-btn" data-value="Mostly - 1-2 were less engaged"><span class="choice-indicator"></span>Mostly - 1-2 were less engaged</button><button type="button" class="choice-btn" data-value="No - several were disengaged"><span class="choice-indicator"></span>No - several were disengaged</button><button type="button" class="choice-btn" data-value="No - poor overall"><span class="choice-indicator"></span>No - poor overall</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q10.3</span>
+                        <span>Were there owners who didn't set lineups or respond to trades?</span>
+                    </div><div class="choice-group" data-question="q10_3"><button type="button" class="choice-btn" data-value="No issues"><span class="choice-indicator"></span>No issues</button><button type="button" class="choice-btn" data-value="Minor issues with 1-2 owners"><span class="choice-indicator"></span>Minor issues with 1-2 owners</button><button type="button" class="choice-btn" data-value="Significant issues with multiple owners"><span class="choice-indicator"></span>Significant issues with multiple owners</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q10.4</span>
+                        <span>What would improve league engagement?</span>
+                    </div><div class="checkbox-group" data-question="q10_4" data-type="multi"><button type="button" class="checkbox-btn" data-value="More side bets/competitions"><span class="checkbox-indicator"></span>More side bets/competitions</button><button type="button" class="checkbox-btn" data-value="Weekly power rankings/content"><span class="checkbox-indicator"></span>Weekly power rankings/content</button><button type="button" class="checkbox-btn" data-value="More in-person events"><span class="checkbox-indicator"></span>More in-person events</button><button type="button" class="checkbox-btn" data-value="Better chat moderation"><span class="checkbox-indicator"></span>Better chat moderation</button><button type="button" class="checkbox-btn" data-value="Stricter inactive penalties"><span class="checkbox-indicator"></span>Stricter inactive penalties</button><button type="button" class="checkbox-btn" data-value="Nothing - engagement was great"><span class="checkbox-indicator"></span>Nothing - engagement was great</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q10.5</span>
+                        <span>Any shoutouts to fellow owners? (Best trade partner, best shit-talker, etc. - but not JB)</span>
+                    </div><textarea name="q10_5" placeholder="Your thoughts..."></textarea></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q10.6</span>
+                        <span>Specific comments on league culture:</span>
+                    </div><textarea name="q10_6" placeholder="Your thoughts..."></textarea></div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection()">← BACK</button>
+                    <button type="button" class="btn btn-primary" onclick="nextSection()">CONTINUE →</button>
+                </div></div>
+            <div class="section" data-section="11">
+                <div class="section-header">
+                    <div class="section-number">11</div>
+                    <div class="section-title">OVERALL EXPERIENCE & DESTINATION DRAFT</div>
+                </div><div class="section-desc">10% of fees ($300/year) goes to Reserve Fund for a Destination Draft every 4th season (first: 2028)</div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q11.1</span>
+                        <span>Overall fun factor: How much did you enjoy this season? How likely are you to return?</span>
+                    </div><div class="choice-group" data-question="q11_1"><button type="button" class="choice-btn" data-value="5 - Not going anywhere!"><span class="choice-indicator"></span>5 - Not going anywhere!</button><button type="button" class="choice-btn" data-value="4 - Great first season"><span class="choice-indicator"></span>4 - Great first season</button><button type="button" class="choice-btn" data-value="3 - Fine but could be better"><span class="choice-indicator"></span>3 - Fine but could be better</button><button type="button" class="choice-btn" data-value="2 - Probably leaving (paying the fine)"><span class="choice-indicator"></span>2 - Probably leaving (paying the fine)</button><button type="button" class="choice-btn" data-value="1 - Definitely leaving (paying the fine)"><span class="choice-indicator"></span>1 - Definitely leaving (paying the fine)</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q11.2</span>
+                        <span>Are you still committed to the Destination Draft concept?</span>
+                    </div><div class="choice-group" data-question="q11_2"><button type="button" class="choice-btn" data-value="Yes, very excited"><span class="choice-indicator"></span>Yes, very excited</button><button type="button" class="choice-btn" data-value="Yes, but open to other uses"><span class="choice-indicator"></span>Yes, but open to other uses</button><button type="button" class="choice-btn" data-value="Neutral"><span class="choice-indicator"></span>Neutral</button><button type="button" class="choice-btn" data-value="Prefer different use of funds"><span class="choice-indicator"></span>Prefer different use of funds</button><button type="button" class="choice-btn" data-value="Prefer no reserve fund"><span class="choice-indicator"></span>Prefer no reserve fund</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q11.3</span>
+                        <span>Any early thoughts on where the 2028 Destination Draft should be?</span>
+                    </div><textarea name="q11_3" placeholder="Your thoughts..."></textarea></div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection()">← BACK</button>
+                    <button type="button" class="btn btn-primary" onclick="nextSection()">CONTINUE →</button>
+                </div></div>
+            <div class="section" data-section="12">
+                <div class="section-header">
+                    <div class="section-number">12</div>
+                    <div class="section-title">ENHANCEMENT BRAINSTORM 💡</div>
+                </div><div class="section-desc">Suggest NEW features, competitions, or experiences. Dream big!</div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q12.1</span>
+                        <span>What new weekly/seasonal competitions would you like? (survivor pools, pick'em, prop bets, etc.)</span>
+                    </div><textarea name="q12_1" placeholder="Your thoughts..."></textarea></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q12.2</span>
+                        <span>Would you contribute to creating league content?</span>
+                    </div><div class="choice-group" data-question="q12_2"><button type="button" class="choice-btn" data-value="Yes, I'd help create content"><span class="choice-indicator"></span>Yes, I'd help create content</button><button type="button" class="choice-btn" data-value="Maybe, depending on format"><span class="choice-indicator"></span>Maybe, depending on format</button><button type="button" class="choice-btn" data-value="No, but I'd consume it"><span class="choice-indicator"></span>No, but I'd consume it</button><button type="button" class="choice-btn" data-value="Not interested"><span class="choice-indicator"></span>Not interested</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q12.3</span>
+                        <span>Interest in additional in-person events beyond Destination Draft:</span>
+                    </div><div class="choice-group" data-question="q12_3"><button type="button" class="choice-btn" data-value="Very interested"><span class="choice-indicator"></span>Very interested</button><button type="button" class="choice-btn" data-value="Somewhat interested"><span class="choice-indicator"></span>Somewhat interested</button><button type="button" class="choice-btn" data-value="Not interested"><span class="choice-indicator"></span>Not interested</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q12.4</span>
+                        <span>What types of events would you attend?</span>
+                    </div><div class="checkbox-group" data-question="q12_4" data-type="multi"><button type="button" class="checkbox-btn" data-value="Watch party for NFL games"><span class="checkbox-indicator"></span>Watch party for NFL games</button><button type="button" class="checkbox-btn" data-value="Trophy ceremony"><span class="checkbox-indicator"></span>Trophy ceremony</button><button type="button" class="checkbox-btn" data-value="Mid-season meetup"><span class="checkbox-indicator"></span>Mid-season meetup</button><button type="button" class="checkbox-btn" data-value="Awards banquet"><span class="checkbox-indicator"></span>Awards banquet</button><button type="button" class="checkbox-btn" data-value="Punishment witnessing"><span class="checkbox-indicator"></span>Punishment witnessing</button><button type="button" class="checkbox-btn" data-value="Golf outing/activity"><span class="checkbox-indicator"></span>Golf outing/activity</button></div></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q12.5</span>
+                        <span>Suggested additional awards: (Most Points, Best Trader, Biggest Upset, etc.)</span>
+                    </div><textarea name="q12_5" placeholder="Your thoughts..."></textarea></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q12.6</span>
+                        <span>Any dynasty-specific features to add? (contracts, salary caps, franchise tags, etc.)</span>
+                    </div><textarea name="q12_6" placeholder="Your thoughts..."></textarea></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">Q12.7</span>
+                        <span>Any other creative ideas to make the league more fun, engaging, or memorable?</span>
+                    </div><textarea name="q12_7" placeholder="Your thoughts..."></textarea></div>
+                <div class="question-card">
+                    <div class="question-label">
+                        <span class="q-num">FINAL</span>
+                        <span>Your Name (optional but appreciated)</span>
+                    </div><input type="text" name="owner_name" placeholder="Who dis?"></div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection()">← BACK</button>
+                    <button type="button" class="btn btn-submit" onclick="submitSurvey()">SUBMIT SURVEY 🏆</button>
+                </div></div>
+        </form>
+        <div class="success-screen" id="successScreen">
+            <div class="trophy">🏆</div>
+            <div class="success-title">FEEDBACK RECEIVED!</div>
+            <div class="success-message">Thanks for taking the time. Your input helps make The Glass Bowl Dynasty the best league for the next 40 years.</div>
+        </div>
+    </div>
+    <script>
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_tGBeRksoRcBYnD2UQBcD0ya1yB2Mv3_txmOgTyuMzPu7EikILRHfjAQhBmJMGK0/exec';
+        let currentSection = 1;
+        const totalSections = 12;
+        const formData = {};
+
+        document.querySelectorAll('.rating-slider').forEach(slider => {
+            const questionName = slider.dataset.question;
+            slider.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    slider.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    formData[questionName] = btn.dataset.value;
+                });
+            });
+        });
+
+        document.querySelectorAll('.choice-group').forEach(group => {
+            const questionName = group.dataset.question;
+            group.querySelectorAll('.choice-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    group.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    formData[questionName] = btn.dataset.value;
+                });
+            });
+        });
+
+        document.querySelectorAll('.checkbox-group').forEach(group => {
+            const questionName = group.dataset.question;
+            formData[questionName] = [];
+            group.querySelectorAll('.checkbox-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.classList.toggle('selected');
+                    const value = btn.dataset.value;
+                    if (btn.classList.contains('selected')) {
+                        if (!formData[questionName].includes(value)) formData[questionName].push(value);
+                    } else {
+                        formData[questionName] = formData[questionName].filter(v => v !== value);
+                    }
+                });
+            });
+        });
+
+        function updateProgress() {
+            document.getElementById('progressBar').style.width = (currentSection / totalSections * 100) + '%';
+            document.getElementById('progressText').textContent = `Section ${currentSection} of ${totalSections}`;
+        }
+
+        function showSection(num) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelector(`.section[data-section="${num}"]`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            updateProgress();
+        }
+
+        function nextSection() { if (currentSection < totalSections) { currentSection++; showSection(currentSection); } }
+        function prevSection() { if (currentSection > 1) { currentSection--; showSection(currentSection); } }
+
+        function collectFormData() {
+            document.querySelectorAll('textarea, input[type="text"]').forEach(el => {
+                if (el.name) formData[el.name] = el.value || '';
+            });
+            Object.keys(formData).forEach(key => {
+                if (Array.isArray(formData[key])) formData[key] = formData[key].join(', ');
+            });
+            formData.timestamp = new Date().toISOString();
+            return formData;
+        }
+
+        async function submitSurvey() {
+            const data = collectFormData();
+            document.getElementById('loadingOverlay').classList.add('active');
+            try {
+                if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+                    console.log('Survey data (demo mode):', data);
+                    setTimeout(() => {
+                        document.getElementById('loadingOverlay').classList.remove('active');
+                        document.getElementById('surveyForm').style.display = 'none';
+                        document.querySelector('.progress-container').style.display = 'none';
+                        document.querySelector('.progress-text').style.display = 'none';
+                        document.getElementById('introBox').style.display = 'none';
+                        document.getElementById('successScreen').classList.add('active');
+                    }, 1500);
+                    return;
+                }
+                await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+                document.getElementById('loadingOverlay').classList.remove('active');
+                document.getElementById('surveyForm').style.display = 'none';
+                document.querySelector('.progress-container').style.display = 'none';
+                document.querySelector('.progress-text').style.display = 'none';
+                document.getElementById('introBox').style.display = 'none';
+                document.getElementById('successScreen').classList.add('active');
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loadingOverlay').classList.remove('active');
+                alert('There was an error submitting. Please try again.');
+            }
+        }
+        updateProgress();
+    </script>
+</body>
+</html>
