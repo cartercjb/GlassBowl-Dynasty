@@ -744,6 +744,7 @@
         let webcamEnabled = false;
         let recordedBlob = null;
         let selectedOwner = '';
+        let isRecording = false;
 
         const webcamPrompt = document.getElementById('webcamPrompt');
         const webcamContainer = document.getElementById('webcamContainer');
@@ -799,9 +800,13 @@
             
             recordedChunks = [];
             
-            const options = { mimeType: 'video/webm;codecs=vp9,opus' };
+            // Use MP4 compatible format
+            const options = { mimeType: 'video/mp4' };
             if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                options.mimeType = 'video/webm;codecs=vp8,opus';
+                options.mimeType = 'video/webm;codecs=h264';
+            }
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                options.mimeType = 'video/webm;codecs=vp9,opus';
             }
             if (!MediaRecorder.isTypeSupported(options.mimeType)) {
                 options.mimeType = 'video/webm';
@@ -817,11 +822,14 @@
                 };
                 
                 mediaRecorder.onstop = () => {
-                    recordedBlob = new Blob(recordedChunks, { type: 'video/webm' });
+                    const mimeType = mediaRecorder.mimeType.includes('mp4') ? 'video/mp4' : 'video/webm';
+                    recordedBlob = new Blob(recordedChunks, { type: mimeType });
                     downloadBtn.classList.add('active');
+                    downloadBtn.innerHTML = '📥 DOWNLOAD REACTION VIDEO';
                 };
                 
                 mediaRecorder.start();
+                isRecording = true;
                 recordingIndicator.style.display = 'flex';
             } catch (err) {
                 console.error('Recording error:', err);
@@ -831,16 +839,49 @@
         function stopRecording() {
             if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                 mediaRecorder.stop();
+                isRecording = false;
                 recordingIndicator.style.display = 'none';
+                
+                // Stop all tracks to turn off camera
+                if (mediaStream) {
+                    mediaStream.getTracks().forEach(track => track.stop());
+                }
+                webcamContainer.classList.remove('active');
             }
         }
 
         function downloadVideo() {
+            // If still recording, stop first
+            if (isRecording) {
+                // Stop recording and wait for blob to be ready
+                mediaRecorder.onstop = () => {
+                    const mimeType = mediaRecorder.mimeType.includes('mp4') ? 'video/mp4' : 'video/webm';
+                    recordedBlob = new Blob(recordedChunks, { type: mimeType });
+                    isRecording = false;
+                    recordingIndicator.style.display = 'none';
+                    
+                    // Stop camera
+                    if (mediaStream) {
+                        mediaStream.getTracks().forEach(track => track.stop());
+                    }
+                    webcamContainer.classList.remove('active');
+                    
+                    // Now download
+                    performDownload();
+                };
+                mediaRecorder.stop();
+            } else if (recordedBlob) {
+                performDownload();
+            }
+        }
+        
+        function performDownload() {
             if (!recordedBlob) return;
             
             const ownerName = selectedOwner.replace(/\s+/g, '_');
             const timestamp = new Date().toISOString().slice(0,10);
-            const filename = `GlassBowl_${ownerName}_Reaction_${timestamp}.webm`;
+            const extension = recordedBlob.type.includes('mp4') ? 'mp4' : 'webm';
+            const filename = `GlassBowl_${ownerName}_Reaction_${timestamp}.${extension}`;
             
             const url = URL.createObjectURL(recordedBlob);
             const a = document.createElement('a');
@@ -850,6 +891,30 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            
+            // Show completion screen
+            showCompletionScreen();
+        }
+        
+        function showCompletionScreen() {
+            // Hide everything and show completion
+            document.querySelector('.container').innerHTML = `
+                <div style="text-align: center; padding: 3rem 1.5rem; animation: fadeInUp 0.8s ease-out;">
+                    <div style="font-size: 5rem; margin-bottom: 1rem;">🎬</div>
+                    <div style="font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 1rem; letter-spacing: 0.05em;">
+                        ALL DONE!
+                    </div>
+                    <div style="color: var(--text-muted); font-size: 1.1rem; max-width: 350px; margin: 0 auto 2rem; line-height: 1.6;">
+                        Your punishment has been recorded.<br>
+                        Your reaction video has been downloaded.<br><br>
+                        <strong style="color: var(--accent);">Now share it in the group chat!</strong>
+                    </div>
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🏈</div>
+                    <div style="font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--text-muted); letter-spacing: 0.15em;">
+                        GLASS BOWL DYNASTY
+                    </div>
+                </div>
+            `;
         }
 
         // Spin function
@@ -893,11 +958,10 @@
                 fireConfetti();
                 logToSheets(ownerSelect.value, winner);
                 
-                // Stop recording after 3 seconds to capture reaction
-                if (webcamEnabled) {
-                    setTimeout(() => {
-                        stopRecording();
-                    }, 3000);
+                // Show download button if recording (recording continues until they click download)
+                if (webcamEnabled && isRecording) {
+                    downloadBtn.classList.add('active');
+                    downloadBtn.innerHTML = '🛑 STOP RECORDING & DOWNLOAD';
                 }
                 
                 setTimeout(() => {
