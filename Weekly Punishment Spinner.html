@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Glass Bowl Dynasty | Punishment Spinner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #e94560;
+            --accent-glow: rgba(233, 69, 96, 0.5);
+            --gold: #f4d03f;
+            --gold-dim: #c9a227;
+            --text: #eaeaea;
+            --text-muted: #8892a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+        }
+
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(233, 69, 96, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(244, 208, 63, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 1rem 1rem 2rem;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 0.1em;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dim) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            margin-top: 0.15rem;
+        }
+
+        /* Owner Select */
+        .owner-section {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .owner-label {
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .owner-select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(22, 33, 62, 0.9);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238892a0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            transition: all 0.3s ease;
+        }
+
+        .owner-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .owner-select option {
+            background: var(--secondary);
+            color: var(--text);
+        }
+
+        /* Wheel Container */
+        .wheel-wrapper {
+            position: relative;
+            margin: 0 auto 1rem;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 340px;
+            height: 340px;
+        }
+
+        @media (max-width: 380px) {
+            .wheel-container {
+                width: 300px;
+                height: 300px;
+            }
+        }
+
+        /* Pointer at top */
+        .pointer {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+        }
+
+        .pointer::before {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-left: 18px solid transparent;
+            border-right: 18px solid transparent;
+            border-top: 32px solid var(--gold);
+        }
+
+        .pointer::after {
+            content: '';
+            display: block;
+            width: 14px;
+            height: 14px;
+            background: var(--gold-dim);
+            border-radius: 50%;
+            margin: -6px auto 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* SVG Wheel */
+        .wheel-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 8px 30px rgba(0,0,0,0.4));
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        }
+
+        .wheel-segment-path {
+            stroke: rgba(255,255,255,0.15);
+            stroke-width: 2;
+        }
+
+        .segment-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 11px;
+            fill: white;
+            text-anchor: middle;
+            pointer-events: none;
+            letter-spacing: 0.5px;
+        }
+
+        .segment-emoji {
+            font-size: 24px;
+            pointer-events: none;
+        }
+
+        /* Center button */
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(145deg, #2a2a4a 0%, #1a1a2e 100%);
+            border-radius: 50%;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 4px 20px rgba(0,0,0,0.5),
+                inset 0 2px 10px rgba(255,255,255,0.1),
+                0 0 0 4px var(--gold-dim);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .wheel-center:hover:not(.disabled) {
+            transform: translate(-50%, -50%) scale(1.05);
+            box-shadow: 
+                0 6px 25px rgba(0,0,0,0.6),
+                inset 0 2px 10px rgba(255,255,255,0.1),
+                0 0 0 4px var(--gold);
+        }
+
+        .wheel-center:active:not(.disabled) {
+            transform: translate(-50%, -50%) scale(0.98);
+        }
+
+        .wheel-center-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            text-align: center;
+            line-height: 1.1;
+            letter-spacing: 0.1em;
+        }
+
+        .wheel-center.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Outer ring decoration */
+        .wheel-outer-ring {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 6px solid var(--gold-dim);
+            border-radius: 50%;
+            box-shadow: 
+                inset 0 0 20px rgba(244, 208, 63, 0.2),
+                0 0 30px rgba(0,0,0,0.3);
+            pointer-events: none;
+        }
+
+        /* Result Display */
+        .result-container {
+            width: 100%;
+            max-width: 340px;
+            background: rgba(22, 33, 62, 0.95);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease;
+        }
+
+        .result-container.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .result-container.winner {
+            border-color: var(--gold);
+            box-shadow: 0 0 30px rgba(244, 208, 63, 0.3);
+        }
+
+        .result-emoji {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.4rem;
+        }
+
+        .result-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 0.6rem;
+            line-height: 1.2;
+            letter-spacing: 0.05em;
+        }
+
+        .result-description {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .result-logged {
+            margin-top: 0.75rem;
+            padding-top: 0.6rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.75rem;
+            color: #27ae60;
+        }
+
+        .result-logged.error {
+            color: var(--accent);
+        }
+
+        /* Confetti canvas */
+        #confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Legend */
+        .legend {
+            width: 100%;
+            max-width: 340px;
+            margin-top: 1rem;
+            background: rgba(22, 33, 62, 0.6);
+            border-radius: 10px;
+            padding: 0.75rem;
+        }
+
+        .legend-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.4rem;
+            font-size: 0.7rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--text-muted);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <canvas id="confetti"></canvas>
+
+    <div class="container">
+        <header class="header">
+            <div class="logo">GLASS BOWL DYNASTY</div>
+            <div class="subtitle">PUNISHMENT SPINNER</div>
+        </header>
+
+        <div class="owner-section">
+            <label class="owner-label">WHO'S FACING THE MUSIC?</label>
+            <select class="owner-select" id="ownerSelect">
+                <option value="">-- Select Your Name --</option>
+                <option value="Aaron DeGiulio">Aaron DeGiulio</option>
+                <option value="Brian Scott">Brian Scott</option>
+                <option value="Carter Bayer">Carter Bayer</option>
+                <option value="Connor Scott">Connor Scott</option>
+                <option value="Eric Croak">Eric Croak</option>
+                <option value="Jay O'Bryant">Jay O'Bryant</option>
+                <option value="Jon Bartsch">Jon Bartsch</option>
+                <option value="Kyle Boyers">Kyle Boyers</option>
+                <option value="Kyle Mautíer">Kyle Mautíer</option>
+                <option value="Lucas O'Neil">Lucas O'Neil</option>
+                <option value="Ryan Johnston">Ryan Johnston</option>
+                <option value="Tyler Clark">Tyler Clark</option>
+            </select>
+        </div>
+
+        <div class="wheel-wrapper">
+            <div class="wheel-container">
+                <div class="wheel-outer-ring"></div>
+                <div class="pointer"></div>
+                
+                <svg class="wheel-svg" id="wheel" viewBox="0 0 400 400">
+                    <!-- Segments generated by JS -->
+                </svg>
+                
+                <div class="wheel-center disabled" id="spinBtn">
+                    <span class="wheel-center-text">SELECT<br>NAME</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-container" id="resultContainer">
+            <div class="result-emoji" id="resultEmoji">🎰</div>
+            <div class="result-label">YOUR PUNISHMENT</div>
+            <div class="result-title" id="resultTitle">Spin to find out...</div>
+            <div class="result-description" id="resultDescription">Select your name and click SPIN!</div>
+            <div class="result-logged" id="resultLogged"></div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-title">PUNISHMENTS</div>
+            <div class="legend-grid" id="legendGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION - UPDATE THIS URL
+        // ============================================
+        const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+        // ============================================
+
+        const punishments = [
+            { id: 1, title: "Beer Chug", emoji: "🍺", color: "#e74c3c", description: "Shotgun a beer and submit your official chug time. Film it or it didn't happen." },
+            { id: 2, title: "Push-Ups", emoji: "💪", color: "#3498db", description: "Complete 100 push-ups on camera. Clock your time. No breaks longer than 10 seconds." },
+            { id: 3, title: "Onion Bite", emoji: "🧅", color: "#27ae60", description: "Take a full bite out of a raw onion and swallow it. Crying is encouraged." },
+            { id: 4, title: "Love Poem", emoji: "💕", color: "#e91e63", description: "Recite an original love poem to last year's league winner. Minimum 8 lines. Eye contact required." },
+            { id: 5, title: "TikTok Dance", emoji: "💃", color: "#9b59b6", description: "Perform a trending TikTok dance. League picks the song. Full commitment required." },
+            { id: 6, title: "Weather Report", emoji: "🌪️", color: "#00bcd4", description: "Deliver a weatherman-style forecast about your team being 'a disaster front.' 60 seconds minimum." },
+            { id: 7, title: "Roast", emoji: "🎭", color: "#ff9800", description: "Dress like another owner (league picks) and record a full roast in their voice/style. 2 min minimum." },
+            { id: 8, title: "Gallon Chug", emoji: "🥛", color: "#8bc34a", description: "Attempt the gallon-of-milk chug... if you dare. Have a bucket ready." },
+            { id: 9, title: "ASMR", emoji: "🎙️", color: "#ff5722", description: "Whisper a 60-second team recap in ASMR style, shaming your performance. Get close to the mic." }
+        ];
+
+        const wheelSvg = document.getElementById('wheel');
+        const spinBtn = document.getElementById('spinBtn');
+        const ownerSelect = document.getElementById('ownerSelect');
+        const resultContainer = document.getElementById('resultContainer');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultDescription = document.getElementById('resultDescription');
+        const resultEmoji = document.getElementById('resultEmoji');
+        const resultLogged = document.getElementById('resultLogged');
+        const legendGrid = document.getElementById('legendGrid');
+        const confettiCanvas = document.getElementById('confetti');
+        const confettiCtx = confettiCanvas.getContext('2d');
+
+        let isSpinning = false;
+        let currentRotation = 0;
+        const segmentCount = punishments.length;
+        const segmentAngle = 360 / segmentCount;
+
+        // Build the wheel with SVG
+        function buildWheel() {
+            const cx = 200, cy = 200, r = 185;
+            
+            punishments.forEach((p, i) => {
+                const startAngle = (i * segmentAngle - 90) * Math.PI / 180;
+                const endAngle = ((i + 1) * segmentAngle - 90) * Math.PI / 180;
+                
+                const x1 = cx + r * Math.cos(startAngle);
+                const y1 = cy + r * Math.sin(startAngle);
+                const x2 = cx + r * Math.cos(endAngle);
+                const y2 = cy + r * Math.sin(endAngle);
+                
+                // Create gradient for 3D effect
+                const gradId = `grad${i}`;
+                const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+                gradient.setAttribute('id', gradId);
+                gradient.setAttribute('x1', '0%');
+                gradient.setAttribute('y1', '0%');
+                gradient.setAttribute('x2', '100%');
+                gradient.setAttribute('y2', '100%');
+                
+                const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                stop1.setAttribute('offset', '0%');
+                stop1.setAttribute('style', `stop-color:${lightenColor(p.color, 20)}`);
+                
+                const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                stop2.setAttribute('offset', '100%');
+                stop2.setAttribute('style', `stop-color:${p.color}`);
+                
+                gradient.appendChild(stop1);
+                gradient.appendChild(stop2);
+                defs.appendChild(gradient);
+                wheelSvg.appendChild(defs);
+                
+                // Create path
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const largeArcFlag = segmentAngle > 180 ? 1 : 0;
+                const d = `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
+                path.setAttribute('d', d);
+                path.setAttribute('fill', `url(#${gradId})`);
+                path.setAttribute('class', 'wheel-segment-path');
+                wheelSvg.appendChild(path);
+                
+                // Calculate position for emoji and text
+                const midAngle = ((i + 0.5) * segmentAngle - 90) * Math.PI / 180;
+                const emojiR = r * 0.72;
+                const textR = r * 0.48;
+                
+                // Emoji
+                const emojiEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                emojiEl.setAttribute('x', cx + emojiR * Math.cos(midAngle));
+                emojiEl.setAttribute('y', cy + emojiR * Math.sin(midAngle));
+                emojiEl.setAttribute('class', 'segment-emoji');
+                emojiEl.setAttribute('text-anchor', 'middle');
+                emojiEl.setAttribute('dominant-baseline', 'middle');
+                emojiEl.textContent = p.emoji;
+                wheelSvg.appendChild(emojiEl);
+                
+                // Text label - curved along the segment
+                const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                const textX = cx + textR * Math.cos(midAngle);
+                const textY = cy + textR * Math.sin(midAngle);
+                textEl.setAttribute('x', textX);
+                textEl.setAttribute('y', textY);
+                textEl.setAttribute('class', 'segment-text');
+                textEl.setAttribute('dominant-baseline', 'middle');
+                
+                // Rotate text to be readable
+                let rotateAngle = (i + 0.5) * segmentAngle;
+                // Flip text on bottom half so it's not upside down
+                if (rotateAngle > 90 && rotateAngle < 270) {
+                    rotateAngle += 180;
+                }
+                textEl.setAttribute('transform', `rotate(${rotateAngle}, ${textX}, ${textY})`);
+                textEl.textContent = p.title.toUpperCase();
+                wheelSvg.appendChild(textEl);
+            });
+        }
+
+        // Lighten color helper
+        function lightenColor(color, percent) {
+            const num = parseInt(color.replace('#', ''), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) + amt;
+            const G = (num >> 8 & 0x00FF) + amt;
+            const B = (num & 0x0000FF) + amt;
+            return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        }
+
+        // Build legend
+        function buildLegend() {
+            punishments.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'legend-item';
+                item.innerHTML = `<span class="legend-dot" style="background:${p.color}"></span>${p.emoji} ${p.title}`;
+                legendGrid.appendChild(item);
+            });
+        }
+
+        // Setup confetti canvas
+        function resizeConfetti() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        }
+        resizeConfetti();
+        window.addEventListener('resize', resizeConfetti);
+
+        // Owner select handler
+        ownerSelect.addEventListener('change', function() {
+            if (this.value) {
+                spinBtn.classList.remove('disabled');
+                spinBtn.querySelector('.wheel-center-text').innerHTML = 'SPIN!';
+            } else {
+                spinBtn.classList.add('disabled');
+                spinBtn.querySelector('.wheel-center-text').innerHTML = 'SELECT<br>NAME';
+            }
+        });
+
+        // Spin function
+        spinBtn.addEventListener('click', function() {
+            if (isSpinning || !ownerSelect.value || spinBtn.classList.contains('disabled')) return;
+            
+            isSpinning = true;
+            spinBtn.classList.add('disabled');
+            spinBtn.querySelector('.wheel-center-text').innerHTML = '...';
+            resultContainer.classList.remove('show', 'winner');
+            
+            // Truly random selection
+            const randomSegment = Math.floor(Math.random() * segmentCount);
+            
+            // Calculate spin: 5-8 full rotations + land on random segment
+            const extraSpins = (5 + Math.random() * 3) * 360;
+            const segmentOffset = randomSegment * segmentAngle + segmentAngle / 2;
+            const finalAngle = extraSpins + (360 - segmentOffset) + 90;
+            
+            currentRotation += finalAngle;
+            wheelSvg.style.transform = `rotate(${currentRotation}deg)`;
+            
+            // Show result after spin
+            setTimeout(() => {
+                const winner = punishments[randomSegment];
+                
+                resultEmoji.textContent = winner.emoji;
+                resultTitle.textContent = winner.title;
+                resultDescription.textContent = winner.description;
+                resultLogged.textContent = '';
+                resultContainer.classList.add('show', 'winner');
+                
+                fireConfetti();
+                logToSheets(ownerSelect.value, winner);
+                
+                setTimeout(() => {
+                    isSpinning = false;
+                    spinBtn.classList.remove('disabled');
+                    spinBtn.querySelector('.wheel-center-text').innerHTML = 'SPIN<br>AGAIN';
+                }, 1000);
+                
+            }, 4100);
+        });
+
+        // Log to Google Sheets
+        async function logToSheets(owner, punishment) {
+            const data = {
+                timestamp: new Date().toISOString(),
+                owner: owner,
+                punishment_id: punishment.id,
+                punishment_title: punishment.title
+            };
+            
+            if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                console.log('Demo mode - would log:', data);
+                resultLogged.textContent = '✓ Logged (demo mode)';
+                return;
+            }
+            
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                resultLogged.textContent = '✓ Logged to league records';
+            } catch (error) {
+                console.error('Logging error:', error);
+                resultLogged.textContent = '⚠ Could not log result';
+                resultLogged.classList.add('error');
+            }
+        }
+
+        // Confetti animation
+        let confettiPieces = [];
+        const confettiColors = ['#e94560', '#f4d03f', '#3498db', '#2ecc71', '#9b59b6', '#e91e63', '#ff9800'];
+
+        function fireConfetti() {
+            confettiPieces = [];
+            for (let i = 0; i < 150; i++) {
+                confettiPieces.push({
+                    x: confettiCanvas.width / 2,
+                    y: confettiCanvas.height / 2,
+                    vx: (Math.random() - 0.5) * 25,
+                    vy: (Math.random() - 0.5) * 25 - 12,
+                    color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+                    size: Math.random() * 10 + 5,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: (Math.random() - 0.5) * 15
+                });
+            }
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            
+            let stillActive = false;
+            
+            confettiPieces.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.4;
+                p.vx *= 0.99;
+                p.rotation += p.rotationSpeed;
+                
+                if (p.y < confettiCanvas.height + 50) {
+                    stillActive = true;
+                    confettiCtx.save();
+                    confettiCtx.translate(p.x, p.y);
+                    confettiCtx.rotate(p.rotation * Math.PI / 180);
+                    confettiCtx.fillStyle = p.color;
+                    confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+                    confettiCtx.restore();
+                }
+            });
+            
+            if (stillActive) {
+                requestAnimationFrame(animateConfetti);
+            }
+        }
+
+        // Initialize
+        buildWheel();
+        buildLegend();
+    </script>
+</body>
+</html>
